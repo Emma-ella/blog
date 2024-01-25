@@ -1,0 +1,16 @@
+current directory: /home/emmaella/Documents/proruby/asserexercises/blog/vendor/bundle/ruby/3.0.0/gems/debug-1.9.1/ext/debug
+/home/emmaella/.rbenv/versions/3.0.2/bin/ruby -I /home/emmaella/.rbenv/versions/3.0.2/lib/ruby/3.0.0 -r ./siteconf20240117-12282-pjp0ra.rb extconf.rb
+creating Makefile
+
+current directory: /home/emmaella/Documents/proruby/asserexercises/blog/vendor/bundle/ruby/3.0.0/gems/debug-1.9.1/ext/debug
+make DESTDIR\= clean
+
+current directory: /home/emmaella/Documents/proruby/asserexercises/blog/vendor/bundle/ruby/3.0.0/gems/debug-1.9.1/ext/debug
+make DESTDIR\=
+compiling debug.c
+compiling iseq_collector.c
+linking shared-object debug/debug.so
+
+current directory: /home/emmaella/Documents/proruby/asserexercises/blog/vendor/bundle/ruby/3.0.0/gems/debug-1.9.1/ext/debug
+make DESTDIR\= install
+/usr/bin/install -c -m 0755 debug.so ./.gem.20240117-12282-h1rdjh/debug
