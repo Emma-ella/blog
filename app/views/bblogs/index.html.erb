@@ -1,0 +1,12 @@
+<h1>Les BLOGS</h1>
+
+
+
+
+<% @bblogs.each do |bblog| %>
+  <li >
+    <%= link_to bblog.title , bblog_posts_path(bblog) %>
+  </li>
+<% end %>
+
+

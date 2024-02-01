@@ -1,0 +1,2 @@
+module BblogsHelper
+end

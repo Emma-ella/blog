@@ -1,0 +1,20 @@
+
+  <% if comment.persisted? %>
+    <p>
+      <strong>Content:</strong>
+      <%= comment. content %>
+    </p>         
+
+    <p>
+      <strong>Comment_at:</strong>
+      <%= comment.date %>
+    </p>
+
+
+    <p>
+        <%= link_to "Destroy Comment", post_comments_path(comment.id), data: {
+                    turbo_method: :delete,
+                    turbo_confirm: "Are you sure?"
+                    } %>
+    </p>
+  <%end%>
