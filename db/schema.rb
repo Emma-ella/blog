@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_30_105225) do
+ActiveRecord::Schema[7.0].define(version: 2024_02_02_144335) do
   create_table "bblogs", force: :cascade do |t|
     t.text "custom_domain"
     t.string "title"
@@ -35,6 +35,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_30_105225) do
     t.datetime "published_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "bblog_id"
+    t.index ["bblog_id"], name: "index_posts_on_bblog_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -50,4 +52,5 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_30_105225) do
   end
 
   add_foreign_key "comments", "posts"
+  add_foreign_key "posts", "bblogs"
 end

@@ -1,0 +1,824 @@
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "bblogs"[0m
+  [1m[35m (12.2ms)[0m  [1m[35mCREATE TABLE "bblogs" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "custom_domain" text, "title" varchar, "theme" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "comments"[0m
+  [1m[35m (6.6ms)[0m  [1m[35mCREATE TABLE "comments" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "content" text, "date" datetime(6), "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "post_id" integer NOT NULL)[0m
+  [1m[35m (6.6ms)[0m  [1m[35mCREATE INDEX "index_comments_on_post_id" ON "comments" ("post_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "posts"[0m
+  [1m[35m (6.9ms)[0m  [1m[35mCREATE TABLE "posts" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "title" varchar, "content" text, "author_name" varchar, "published_at" datetime(6), "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "users"[0m
+  [1m[35m (6.4ms)[0m  [1m[35mCREATE TABLE "users" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "email" varchar DEFAULT '' NOT NULL, "encrypted_password" varchar DEFAULT '' NOT NULL, "reset_password_token" varchar, "reset_password_sent_at" datetime(6), "remember_created_at" datetime(6), "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (6.8ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_users_on_email" ON "users" ("email")[0m
+  [1m[35m (6.6ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_users_on_reset_password_token" ON "users" ("reset_password_token")[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE TEMPORARY TABLE "acomments" ("id" integer NOT NULL PRIMARY KEY, "content" text DEFAULT NULL, "date" datetime(6) DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "post_id" integer NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "tindex_acomments_on_post_id" ON "acomments" ("post_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "acomments" ("id","content","date","created_at","updated_at","post_id")
+                     SELECT "id","content","date","created_at","updated_at","post_id" FROM "comments"[0m
+  [1m[35m (0.3ms)[0m  [1m[35mDROP TABLE "comments"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "comments" ("id" integer NOT NULL PRIMARY KEY, "content" text DEFAULT NULL, "date" datetime(6) DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "post_id" integer NOT NULL, CONSTRAINT "fk_rails_2fd19c0db7"
+FOREIGN KEY ("post_id")
+  REFERENCES "posts" ("id")
+)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_comments_on_post_id" ON "comments" ("post_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "comments" ("id","content","date","created_at","updated_at","post_id")
+                     SELECT "id","content","date","created_at","updated_at","post_id" FROM "acomments"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "acomments"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[36mTRANSACTION (5.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (6.7ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (5.4ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20240130105225)[0m
+  [1m[35m (5.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES
+(20240124152604),
+(20240126110149),
+(20240126114135),
+(20240126152907);
+
+[0m
+  [1m[35m (6.8ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.3ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["key", "environment"], ["value", "test"], ["created_at", "2024-02-02 14:47:32.477902"], ["updated_at", "2024-02-02 14:47:32.477902"]]
+  [1m[36mTRANSACTION (5.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "schema_sha1"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.2ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["key", "schema_sha1"], ["value", "27ff6850f1d5751275d1808a197a0446ee4c94da"], ["created_at", "2024-02-02 14:47:32.486754"], ["updated_at", "2024-02-02 14:47:32.486754"]]
+  [1m[36mTRANSACTION (4.9ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to AddBblogToPosts (20240202144335)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE TEMPORARY TABLE "aposts" ("id" integer NOT NULL PRIMARY KEY, "title" varchar DEFAULT NULL, "content" text DEFAULT NULL, "author_name" varchar DEFAULT NULL, "published_at" datetime(6) DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "aposts" ("id","title","content","author_name","published_at","created_at","updated_at")
+                     SELECT "id","title","content","author_name","published_at","created_at","updated_at" FROM "posts"[0m
+  [1m[35m (0.3ms)[0m  [1m[35mDROP TABLE "posts"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "posts" ("id" integer NOT NULL PRIMARY KEY, "title" varchar DEFAULT NULL, "content" text DEFAULT NULL, "author_name" varchar DEFAULT NULL, "published_at" datetime(6) DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "bblog_id" integer NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "posts" ("id","title","content","author_name","published_at","created_at","updated_at")
+                     SELECT "id","title","content","author_name","published_at","created_at","updated_at" FROM "aposts"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "aposts"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_posts_on_bblog_id" ON "posts" ("bblog_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TEMPORARY TABLE "aposts" ("id" integer NOT NULL PRIMARY KEY, "title" varchar DEFAULT NULL, "content" text DEFAULT NULL, "author_name" varchar DEFAULT NULL, "published_at" datetime(6) DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "bblog_id" integer NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "tindex_aposts_on_bblog_id" ON "aposts" ("bblog_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "aposts" ("id","title","content","author_name","published_at","created_at","updated_at","bblog_id")
+                     SELECT "id","title","content","author_name","published_at","created_at","updated_at","bblog_id" FROM "posts"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE "posts"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "posts" ("id" integer NOT NULL PRIMARY KEY, "title" varchar DEFAULT NULL, "content" text DEFAULT NULL, "author_name" varchar DEFAULT NULL, "published_at" datetime(6) DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "bblog_id" integer NOT NULL, CONSTRAINT "fk_rails_ab2138f06e"
+FOREIGN KEY ("bblog_id")
+  REFERENCES "bblogs" ("id")
+)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_posts_on_bblog_id" ON "posts" ("bblog_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "posts" ("id","title","content","author_name","published_at","created_at","updated_at","bblog_id")
+                     SELECT "id","title","content","author_name","published_at","created_at","updated_at","bblog_id" FROM "aposts"[0m
+  [1m[35m (0.4ms)[0m  [1m[35mDROP TABLE "aposts"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20240202144335"]]
+  [1m[36mTRANSACTION (8.8ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.2ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "schema_sha1"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.2ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "bblogs"[0m
+  [1m[35m (6.9ms)[0m  [1m[35mCREATE TABLE "bblogs" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "custom_domain" text, "title" varchar, "theme" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "comments"[0m
+  [1m[35m (6.7ms)[0m  [1m[35mCREATE TABLE "comments" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "content" text, "date" datetime(6), "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "post_id" integer NOT NULL)[0m
+  [1m[35m (6.7ms)[0m  [1m[35mCREATE INDEX "index_comments_on_post_id" ON "comments" ("post_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "posts"[0m
+  [1m[35m (6.5ms)[0m  [1m[35mCREATE TABLE "posts" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "title" varchar, "content" text, "author_name" varchar, "published_at" datetime(6), "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "bblog_id" integer NOT NULL)[0m
+  [1m[35m (6.4ms)[0m  [1m[35mCREATE INDEX "index_posts_on_bblog_id" ON "posts" ("bblog_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "users"[0m
+  [1m[35m (6.6ms)[0m  [1m[35mCREATE TABLE "users" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "email" varchar DEFAULT '' NOT NULL, "encrypted_password" varchar DEFAULT '' NOT NULL, "reset_password_token" varchar, "reset_password_sent_at" datetime(6), "remember_created_at" datetime(6), "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (6.5ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_users_on_email" ON "users" ("email")[0m
+  [1m[35m (6.9ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_users_on_reset_password_token" ON "users" ("reset_password_token")[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TEMPORARY TABLE "acomments" ("id" integer NOT NULL PRIMARY KEY, "content" text DEFAULT NULL, "date" datetime(6) DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "post_id" integer NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "tindex_acomments_on_post_id" ON "acomments" ("post_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "acomments" ("id","content","date","created_at","updated_at","post_id")
+                     SELECT "id","content","date","created_at","updated_at","post_id" FROM "comments"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE "comments"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "comments" ("id" integer NOT NULL PRIMARY KEY, "content" text DEFAULT NULL, "date" datetime(6) DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "post_id" integer NOT NULL, CONSTRAINT "fk_rails_2fd19c0db7"
+FOREIGN KEY ("post_id")
+  REFERENCES "posts" ("id")
+)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_comments_on_post_id" ON "comments" ("post_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "comments" ("id","content","date","created_at","updated_at","post_id")
+                     SELECT "id","content","date","created_at","updated_at","post_id" FROM "acomments"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "acomments"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[36mTRANSACTION (5.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE TEMPORARY TABLE "aposts" ("id" integer NOT NULL PRIMARY KEY, "title" varchar DEFAULT NULL, "content" text DEFAULT NULL, "author_name" varchar DEFAULT NULL, "published_at" datetime(6) DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "bblog_id" integer NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "tindex_aposts_on_bblog_id" ON "aposts" ("bblog_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "aposts" ("id","title","content","author_name","published_at","created_at","updated_at","bblog_id")
+                     SELECT "id","title","content","author_name","published_at","created_at","updated_at","bblog_id" FROM "posts"[0m
+  [1m[35m (0.3ms)[0m  [1m[35mDROP TABLE "posts"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "posts" ("id" integer NOT NULL PRIMARY KEY, "title" varchar DEFAULT NULL, "content" text DEFAULT NULL, "author_name" varchar DEFAULT NULL, "published_at" datetime(6) DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "bblog_id" integer NOT NULL, CONSTRAINT "fk_rails_ab2138f06e"
+FOREIGN KEY ("bblog_id")
+  REFERENCES "bblogs" ("id")
+)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_posts_on_bblog_id" ON "posts" ("bblog_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "posts" ("id","title","content","author_name","published_at","created_at","updated_at","bblog_id")
+                     SELECT "id","title","content","author_name","published_at","created_at","updated_at","bblog_id" FROM "aposts"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "aposts"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[36mTRANSACTION (5.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (7.0ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (5.4ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20240202144335)[0m
+  [1m[35m (5.4ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES
+(20240124152604),
+(20240126110149),
+(20240126114135),
+(20240126152907),
+(20240130105225);
+
+[0m
+  [1m[35m (7.1ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.2ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["key", "environment"], ["value", "test"], ["created_at", "2024-02-02 14:58:37.119567"], ["updated_at", "2024-02-02 14:58:37.119567"]]
+  [1m[36mTRANSACTION (5.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "schema_sha1"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.2ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["key", "schema_sha1"], ["value", "1ee011bdc50cefbc6de5f948c4a37c2475db4276"], ["created_at", "2024-02-02 14:58:37.128852"], ["updated_at", "2024-02-02 14:58:37.128852"]]
+  [1m[36mTRANSACTION (5.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mFixtures Load (0.5ms)[0m  [1m[31mDELETE FROM "bblogs";
+DELETE FROM "comments";
+DELETE FROM "posts";
+DELETE FROM "users";
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (980190962, 'MyText', 'MyString', 'MyString', '2024-02-02 14:58:37.201288', '2024-02-02 14:58:37.201288');
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (298486374, 'MyText', 'MyString', 'MyString', '2024-02-02 14:58:37.201288', '2024-02-02 14:58:37.201288');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (980190962, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:58:37.202779', '2024-02-02 14:58:37.202779');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (298486374, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:58:37.202779', '2024-02-02 14:58:37.202779');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (980190962, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:58:37.203662', '2024-02-02 14:58:37.203662');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (298486374, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:58:37.203662', '2024-02-02 14:58:37.203662');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (980190962, '2024-02-02 14:58:37.204641', '2024-02-02 14:58:37.204641');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (298486374, '2024-02-02 14:58:37.204641', '2024-02-02 14:58:37.204641')[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mFixtures Load (0.4ms)[0m  [1m[31mDELETE FROM "bblogs";
+DELETE FROM "comments";
+DELETE FROM "posts";
+DELETE FROM "users";
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (980190962, 'MyText', 'MyString', 'MyString', '2024-02-02 14:58:37.326364', '2024-02-02 14:58:37.326364');
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (298486374, 'MyText', 'MyString', 'MyString', '2024-02-02 14:58:37.326364', '2024-02-02 14:58:37.326364');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (980190962, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:58:37.326427', '2024-02-02 14:58:37.326427');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (298486374, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:58:37.326427', '2024-02-02 14:58:37.326427');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (980190962, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:58:37.326469', '2024-02-02 14:58:37.326469');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (298486374, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:58:37.326469', '2024-02-02 14:58:37.326469');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (980190962, '2024-02-02 14:58:37.326501', '2024-02-02 14:58:37.326501');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (298486374, '2024-02-02 14:58:37.326501', '2024-02-02 14:58:37.326501')[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mFixtures Load (0.7ms)[0m  [1m[31mDELETE FROM "bblogs";
+DELETE FROM "comments";
+DELETE FROM "posts";
+DELETE FROM "users";
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (980190962, 'MyText', 'MyString', 'MyString', '2024-02-02 14:58:37.332643', '2024-02-02 14:58:37.332643');
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (298486374, 'MyText', 'MyString', 'MyString', '2024-02-02 14:58:37.332643', '2024-02-02 14:58:37.332643');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (980190962, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:58:37.332705', '2024-02-02 14:58:37.332705');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (298486374, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:58:37.332705', '2024-02-02 14:58:37.332705');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (980190962, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:58:37.332764', '2024-02-02 14:58:37.332764');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (298486374, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:58:37.332764', '2024-02-02 14:58:37.332764');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (980190962, '2024-02-02 14:58:37.332838', '2024-02-02 14:58:37.332838');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (298486374, '2024-02-02 14:58:37.332838', '2024-02-02 14:58:37.332838')[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.2ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mFixtures Load (0.4ms)[0m  [1m[31mDELETE FROM "bblogs";
+DELETE FROM "comments";
+DELETE FROM "posts";
+DELETE FROM "users";
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (980190962, 'MyText', 'MyString', 'MyString', '2024-02-02 14:58:37.341348', '2024-02-02 14:58:37.341348');
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (298486374, 'MyText', 'MyString', 'MyString', '2024-02-02 14:58:37.341348', '2024-02-02 14:58:37.341348');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (980190962, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:58:37.341403', '2024-02-02 14:58:37.341403');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (298486374, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:58:37.341403', '2024-02-02 14:58:37.341403');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (980190962, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:58:37.341435', '2024-02-02 14:58:37.341435');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (298486374, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:58:37.341435', '2024-02-02 14:58:37.341435');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (980190962, '2024-02-02 14:58:37.341472', '2024-02-02 14:58:37.341472');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (298486374, '2024-02-02 14:58:37.341472', '2024-02-02 14:58:37.341472')[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mFixtures Load (0.4ms)[0m  [1m[31mDELETE FROM "bblogs";
+DELETE FROM "comments";
+DELETE FROM "posts";
+DELETE FROM "users";
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (980190962, 'MyText', 'MyString', 'MyString', '2024-02-02 14:58:37.347382', '2024-02-02 14:58:37.347382');
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (298486374, 'MyText', 'MyString', 'MyString', '2024-02-02 14:58:37.347382', '2024-02-02 14:58:37.347382');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (980190962, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:58:37.347436', '2024-02-02 14:58:37.347436');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (298486374, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:58:37.347436', '2024-02-02 14:58:37.347436');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (980190962, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:58:37.347484', '2024-02-02 14:58:37.347484');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (298486374, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:58:37.347484', '2024-02-02 14:58:37.347484');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (980190962, '2024-02-02 14:58:37.347513', '2024-02-02 14:58:37.347513');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (298486374, '2024-02-02 14:58:37.347513', '2024-02-02 14:58:37.347513')[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mFixtures Load (0.4ms)[0m  [1m[31mDELETE FROM "bblogs";
+DELETE FROM "comments";
+DELETE FROM "posts";
+DELETE FROM "users";
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (980190962, 'MyText', 'MyString', 'MyString', '2024-02-02 14:58:37.354289', '2024-02-02 14:58:37.354289');
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (298486374, 'MyText', 'MyString', 'MyString', '2024-02-02 14:58:37.354289', '2024-02-02 14:58:37.354289');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (980190962, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:58:37.354350', '2024-02-02 14:58:37.354350');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (298486374, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:58:37.354350', '2024-02-02 14:58:37.354350');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (980190962, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:58:37.354382', '2024-02-02 14:58:37.354382');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (298486374, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:58:37.354382', '2024-02-02 14:58:37.354382');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (980190962, '2024-02-02 14:58:37.354415', '2024-02-02 14:58:37.354415');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (298486374, '2024-02-02 14:58:37.354415', '2024-02-02 14:58:37.354415')[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mFixtures Load (0.5ms)[0m  [1m[31mDELETE FROM "bblogs";
+DELETE FROM "comments";
+DELETE FROM "posts";
+DELETE FROM "users";
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (980190962, 'MyText', 'MyString', 'MyString', '2024-02-02 14:58:37.359923', '2024-02-02 14:58:37.359923');
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (298486374, 'MyText', 'MyString', 'MyString', '2024-02-02 14:58:37.359923', '2024-02-02 14:58:37.359923');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (980190962, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:58:37.359980', '2024-02-02 14:58:37.359980');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (298486374, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:58:37.359980', '2024-02-02 14:58:37.359980');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (980190962, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:58:37.360012', '2024-02-02 14:58:37.360012');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (298486374, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:58:37.360012', '2024-02-02 14:58:37.360012');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (980190962, '2024-02-02 14:58:37.360050', '2024-02-02 14:58:37.360050');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (298486374, '2024-02-02 14:58:37.360050', '2024-02-02 14:58:37.360050')[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mFixtures Load (0.6ms)[0m  [1m[31mDELETE FROM "bblogs";
+DELETE FROM "comments";
+DELETE FROM "posts";
+DELETE FROM "users";
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (980190962, 'MyText', 'MyString', 'MyString', '2024-02-02 14:58:37.367044', '2024-02-02 14:58:37.367044');
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (298486374, 'MyText', 'MyString', 'MyString', '2024-02-02 14:58:37.367044', '2024-02-02 14:58:37.367044');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (980190962, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:58:37.367135', '2024-02-02 14:58:37.367135');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (298486374, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:58:37.367135', '2024-02-02 14:58:37.367135');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (980190962, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:58:37.367196', '2024-02-02 14:58:37.367196');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (298486374, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:58:37.367196', '2024-02-02 14:58:37.367196');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (980190962, '2024-02-02 14:58:37.367239', '2024-02-02 14:58:37.367239');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (298486374, '2024-02-02 14:58:37.367239', '2024-02-02 14:58:37.367239')[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.2ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "schema_sha1"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mFixtures Load (0.6ms)[0m  [1m[31mDELETE FROM "bblogs";
+DELETE FROM "comments";
+DELETE FROM "posts";
+DELETE FROM "users";
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (980190962, 'MyText', 'MyString', 'MyString', '2024-02-02 14:59:11.782997', '2024-02-02 14:59:11.782997');
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (298486374, 'MyText', 'MyString', 'MyString', '2024-02-02 14:59:11.782997', '2024-02-02 14:59:11.782997');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (980190962, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:59:11.784543', '2024-02-02 14:59:11.784543');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (298486374, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:59:11.784543', '2024-02-02 14:59:11.784543');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (980190962, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:59:11.785444', '2024-02-02 14:59:11.785444');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (298486374, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:59:11.785444', '2024-02-02 14:59:11.785444');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (980190962, '2024-02-02 14:59:11.786347', '2024-02-02 14:59:11.786347');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (298486374, '2024-02-02 14:59:11.786347', '2024-02-02 14:59:11.786347')[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mFixtures Load (0.5ms)[0m  [1m[31mDELETE FROM "bblogs";
+DELETE FROM "comments";
+DELETE FROM "posts";
+DELETE FROM "users";
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (980190962, 'MyText', 'MyString', 'MyString', '2024-02-02 14:59:11.884238', '2024-02-02 14:59:11.884238');
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (298486374, 'MyText', 'MyString', 'MyString', '2024-02-02 14:59:11.884238', '2024-02-02 14:59:11.884238');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (980190962, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:59:11.884300', '2024-02-02 14:59:11.884300');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (298486374, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:59:11.884300', '2024-02-02 14:59:11.884300');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (980190962, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:59:11.884340', '2024-02-02 14:59:11.884340');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (298486374, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:59:11.884340', '2024-02-02 14:59:11.884340');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (980190962, '2024-02-02 14:59:11.884375', '2024-02-02 14:59:11.884375');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (298486374, '2024-02-02 14:59:11.884375', '2024-02-02 14:59:11.884375')[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mFixtures Load (0.5ms)[0m  [1m[31mDELETE FROM "bblogs";
+DELETE FROM "comments";
+DELETE FROM "posts";
+DELETE FROM "users";
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (980190962, 'MyText', 'MyString', 'MyString', '2024-02-02 14:59:11.890624', '2024-02-02 14:59:11.890624');
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (298486374, 'MyText', 'MyString', 'MyString', '2024-02-02 14:59:11.890624', '2024-02-02 14:59:11.890624');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (980190962, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:59:11.890682', '2024-02-02 14:59:11.890682');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (298486374, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:59:11.890682', '2024-02-02 14:59:11.890682');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (980190962, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:59:11.890724', '2024-02-02 14:59:11.890724');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (298486374, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:59:11.890724', '2024-02-02 14:59:11.890724');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (980190962, '2024-02-02 14:59:11.890758', '2024-02-02 14:59:11.890758');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (298486374, '2024-02-02 14:59:11.890758', '2024-02-02 14:59:11.890758')[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mFixtures Load (0.4ms)[0m  [1m[31mDELETE FROM "bblogs";
+DELETE FROM "comments";
+DELETE FROM "posts";
+DELETE FROM "users";
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (980190962, 'MyText', 'MyString', 'MyString', '2024-02-02 14:59:11.897450', '2024-02-02 14:59:11.897450');
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (298486374, 'MyText', 'MyString', 'MyString', '2024-02-02 14:59:11.897450', '2024-02-02 14:59:11.897450');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (980190962, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:59:11.897525', '2024-02-02 14:59:11.897525');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (298486374, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:59:11.897525', '2024-02-02 14:59:11.897525');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (980190962, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:59:11.897557', '2024-02-02 14:59:11.897557');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (298486374, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:59:11.897557', '2024-02-02 14:59:11.897557');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (980190962, '2024-02-02 14:59:11.897585', '2024-02-02 14:59:11.897585');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (298486374, '2024-02-02 14:59:11.897585', '2024-02-02 14:59:11.897585')[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mFixtures Load (0.4ms)[0m  [1m[31mDELETE FROM "bblogs";
+DELETE FROM "comments";
+DELETE FROM "posts";
+DELETE FROM "users";
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (980190962, 'MyText', 'MyString', 'MyString', '2024-02-02 14:59:11.903000', '2024-02-02 14:59:11.903000');
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (298486374, 'MyText', 'MyString', 'MyString', '2024-02-02 14:59:11.903000', '2024-02-02 14:59:11.903000');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (980190962, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:59:11.903055', '2024-02-02 14:59:11.903055');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (298486374, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:59:11.903055', '2024-02-02 14:59:11.903055');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (980190962, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:59:11.903086', '2024-02-02 14:59:11.903086');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (298486374, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:59:11.903086', '2024-02-02 14:59:11.903086');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (980190962, '2024-02-02 14:59:11.903114', '2024-02-02 14:59:11.903114');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (298486374, '2024-02-02 14:59:11.903114', '2024-02-02 14:59:11.903114')[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mFixtures Load (0.5ms)[0m  [1m[31mDELETE FROM "bblogs";
+DELETE FROM "comments";
+DELETE FROM "posts";
+DELETE FROM "users";
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (980190962, 'MyText', 'MyString', 'MyString', '2024-02-02 14:59:11.909150', '2024-02-02 14:59:11.909150');
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (298486374, 'MyText', 'MyString', 'MyString', '2024-02-02 14:59:11.909150', '2024-02-02 14:59:11.909150');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (980190962, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:59:11.909206', '2024-02-02 14:59:11.909206');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (298486374, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:59:11.909206', '2024-02-02 14:59:11.909206');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (980190962, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:59:11.909241', '2024-02-02 14:59:11.909241');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (298486374, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:59:11.909241', '2024-02-02 14:59:11.909241');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (980190962, '2024-02-02 14:59:11.909271', '2024-02-02 14:59:11.909271');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (298486374, '2024-02-02 14:59:11.909271', '2024-02-02 14:59:11.909271')[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mFixtures Load (0.6ms)[0m  [1m[31mDELETE FROM "bblogs";
+DELETE FROM "comments";
+DELETE FROM "posts";
+DELETE FROM "users";
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (980190962, 'MyText', 'MyString', 'MyString', '2024-02-02 14:59:11.915484', '2024-02-02 14:59:11.915484');
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (298486374, 'MyText', 'MyString', 'MyString', '2024-02-02 14:59:11.915484', '2024-02-02 14:59:11.915484');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (980190962, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:59:11.915539', '2024-02-02 14:59:11.915539');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (298486374, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:59:11.915539', '2024-02-02 14:59:11.915539');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (980190962, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:59:11.915570', '2024-02-02 14:59:11.915570');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (298486374, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:59:11.915570', '2024-02-02 14:59:11.915570');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (980190962, '2024-02-02 14:59:11.915601', '2024-02-02 14:59:11.915601');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (298486374, '2024-02-02 14:59:11.915601', '2024-02-02 14:59:11.915601')[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mFixtures Load (0.6ms)[0m  [1m[31mDELETE FROM "bblogs";
+DELETE FROM "comments";
+DELETE FROM "posts";
+DELETE FROM "users";
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (980190962, 'MyText', 'MyString', 'MyString', '2024-02-02 14:59:11.923631', '2024-02-02 14:59:11.923631');
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (298486374, 'MyText', 'MyString', 'MyString', '2024-02-02 14:59:11.923631', '2024-02-02 14:59:11.923631');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (980190962, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:59:11.923716', '2024-02-02 14:59:11.923716');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (298486374, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:59:11.923716', '2024-02-02 14:59:11.923716');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (980190962, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:59:11.923780', '2024-02-02 14:59:11.923780');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (298486374, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:59:11.923780', '2024-02-02 14:59:11.923780');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (980190962, '2024-02-02 14:59:11.923844', '2024-02-02 14:59:11.923844');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (298486374, '2024-02-02 14:59:11.923844', '2024-02-02 14:59:11.923844')[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.2ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "schema_sha1"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mFixtures Load (0.6ms)[0m  [1m[31mDELETE FROM "bblogs";
+DELETE FROM "comments";
+DELETE FROM "posts";
+DELETE FROM "users";
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (980190962, 'MyText', 'MyString', 'MyString', '2024-02-02 14:59:24.808954', '2024-02-02 14:59:24.808954');
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (298486374, 'MyText', 'MyString', 'MyString', '2024-02-02 14:59:24.808954', '2024-02-02 14:59:24.808954');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (980190962, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:59:24.810579', '2024-02-02 14:59:24.810579');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (298486374, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:59:24.810579', '2024-02-02 14:59:24.810579');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (980190962, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:59:24.811506', '2024-02-02 14:59:24.811506');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (298486374, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:59:24.811506', '2024-02-02 14:59:24.811506');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (980190962, '2024-02-02 14:59:24.812505', '2024-02-02 14:59:24.812505');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (298486374, '2024-02-02 14:59:24.812505', '2024-02-02 14:59:24.812505')[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mFixtures Load (0.6ms)[0m  [1m[31mDELETE FROM "bblogs";
+DELETE FROM "comments";
+DELETE FROM "posts";
+DELETE FROM "users";
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (980190962, 'MyText', 'MyString', 'MyString', '2024-02-02 14:59:24.906005', '2024-02-02 14:59:24.906005');
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (298486374, 'MyText', 'MyString', 'MyString', '2024-02-02 14:59:24.906005', '2024-02-02 14:59:24.906005');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (980190962, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:59:24.906087', '2024-02-02 14:59:24.906087');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (298486374, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:59:24.906087', '2024-02-02 14:59:24.906087');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (980190962, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:59:24.906129', '2024-02-02 14:59:24.906129');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (298486374, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:59:24.906129', '2024-02-02 14:59:24.906129');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (980190962, '2024-02-02 14:59:24.906160', '2024-02-02 14:59:24.906160');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (298486374, '2024-02-02 14:59:24.906160', '2024-02-02 14:59:24.906160')[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mFixtures Load (0.7ms)[0m  [1m[31mDELETE FROM "bblogs";
+DELETE FROM "comments";
+DELETE FROM "posts";
+DELETE FROM "users";
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (980190962, 'MyText', 'MyString', 'MyString', '2024-02-02 14:59:24.912830', '2024-02-02 14:59:24.912830');
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (298486374, 'MyText', 'MyString', 'MyString', '2024-02-02 14:59:24.912830', '2024-02-02 14:59:24.912830');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (980190962, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:59:24.912898', '2024-02-02 14:59:24.912898');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (298486374, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:59:24.912898', '2024-02-02 14:59:24.912898');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (980190962, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:59:24.912938', '2024-02-02 14:59:24.912938');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (298486374, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:59:24.912938', '2024-02-02 14:59:24.912938');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (980190962, '2024-02-02 14:59:24.912972', '2024-02-02 14:59:24.912972');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (298486374, '2024-02-02 14:59:24.912972', '2024-02-02 14:59:24.912972')[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mFixtures Load (0.6ms)[0m  [1m[31mDELETE FROM "bblogs";
+DELETE FROM "comments";
+DELETE FROM "posts";
+DELETE FROM "users";
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (980190962, 'MyText', 'MyString', 'MyString', '2024-02-02 14:59:24.919415', '2024-02-02 14:59:24.919415');
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (298486374, 'MyText', 'MyString', 'MyString', '2024-02-02 14:59:24.919415', '2024-02-02 14:59:24.919415');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (980190962, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:59:24.919478', '2024-02-02 14:59:24.919478');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (298486374, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:59:24.919478', '2024-02-02 14:59:24.919478');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (980190962, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:59:24.919514', '2024-02-02 14:59:24.919514');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (298486374, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:59:24.919514', '2024-02-02 14:59:24.919514');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (980190962, '2024-02-02 14:59:24.919547', '2024-02-02 14:59:24.919547');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (298486374, '2024-02-02 14:59:24.919547', '2024-02-02 14:59:24.919547')[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mFixtures Load (0.5ms)[0m  [1m[31mDELETE FROM "bblogs";
+DELETE FROM "comments";
+DELETE FROM "posts";
+DELETE FROM "users";
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (980190962, 'MyText', 'MyString', 'MyString', '2024-02-02 14:59:24.925918', '2024-02-02 14:59:24.925918');
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (298486374, 'MyText', 'MyString', 'MyString', '2024-02-02 14:59:24.925918', '2024-02-02 14:59:24.925918');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (980190962, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:59:24.926047', '2024-02-02 14:59:24.926047');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (298486374, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:59:24.926047', '2024-02-02 14:59:24.926047');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (980190962, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:59:24.926127', '2024-02-02 14:59:24.926127');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (298486374, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:59:24.926127', '2024-02-02 14:59:24.926127');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (980190962, '2024-02-02 14:59:24.926196', '2024-02-02 14:59:24.926196');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (298486374, '2024-02-02 14:59:24.926196', '2024-02-02 14:59:24.926196')[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mFixtures Load (0.6ms)[0m  [1m[31mDELETE FROM "bblogs";
+DELETE FROM "comments";
+DELETE FROM "posts";
+DELETE FROM "users";
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (980190962, 'MyText', 'MyString', 'MyString', '2024-02-02 14:59:24.933137', '2024-02-02 14:59:24.933137');
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (298486374, 'MyText', 'MyString', 'MyString', '2024-02-02 14:59:24.933137', '2024-02-02 14:59:24.933137');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (980190962, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:59:24.933200', '2024-02-02 14:59:24.933200');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (298486374, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:59:24.933200', '2024-02-02 14:59:24.933200');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (980190962, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:59:24.933237', '2024-02-02 14:59:24.933237');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (298486374, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:59:24.933237', '2024-02-02 14:59:24.933237');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (980190962, '2024-02-02 14:59:24.933273', '2024-02-02 14:59:24.933273');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (298486374, '2024-02-02 14:59:24.933273', '2024-02-02 14:59:24.933273')[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mFixtures Load (0.9ms)[0m  [1m[31mDELETE FROM "bblogs";
+DELETE FROM "comments";
+DELETE FROM "posts";
+DELETE FROM "users";
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (980190962, 'MyText', 'MyString', 'MyString', '2024-02-02 14:59:24.940557', '2024-02-02 14:59:24.940557');
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (298486374, 'MyText', 'MyString', 'MyString', '2024-02-02 14:59:24.940557', '2024-02-02 14:59:24.940557');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (980190962, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:59:24.940621', '2024-02-02 14:59:24.940621');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (298486374, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:59:24.940621', '2024-02-02 14:59:24.940621');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (980190962, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:59:24.940660', '2024-02-02 14:59:24.940660');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (298486374, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:59:24.940660', '2024-02-02 14:59:24.940660');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (980190962, '2024-02-02 14:59:24.940701', '2024-02-02 14:59:24.940701');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (298486374, '2024-02-02 14:59:24.940701', '2024-02-02 14:59:24.940701')[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mFixtures Load (0.5ms)[0m  [1m[31mDELETE FROM "bblogs";
+DELETE FROM "comments";
+DELETE FROM "posts";
+DELETE FROM "users";
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (980190962, 'MyText', 'MyString', 'MyString', '2024-02-02 14:59:24.948081', '2024-02-02 14:59:24.948081');
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (298486374, 'MyText', 'MyString', 'MyString', '2024-02-02 14:59:24.948081', '2024-02-02 14:59:24.948081');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (980190962, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:59:24.948148', '2024-02-02 14:59:24.948148');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (298486374, 'MyText', '2024-01-26 16:29:07', '2024-02-02 14:59:24.948148', '2024-02-02 14:59:24.948148');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (980190962, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:59:24.948209', '2024-02-02 14:59:24.948209');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (298486374, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 14:59:24.948209', '2024-02-02 14:59:24.948209');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (980190962, '2024-02-02 14:59:24.948244', '2024-02-02 14:59:24.948244');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (298486374, '2024-02-02 14:59:24.948244', '2024-02-02 14:59:24.948244')[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.2ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "schema_sha1"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mFixtures Load (1.0ms)[0m  [1m[31mDELETE FROM "bblogs";
+DELETE FROM "comments";
+DELETE FROM "posts";
+DELETE FROM "users";
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (980190962, 'MyText', 'MyString', 'MyString', '2024-02-02 15:00:22.742704', '2024-02-02 15:00:22.742704');
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (298486374, 'MyText', 'MyString', 'MyString', '2024-02-02 15:00:22.742704', '2024-02-02 15:00:22.742704');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (980190962, 'MyText', '2024-01-26 16:29:07', '2024-02-02 15:00:22.744218', '2024-02-02 15:00:22.744218');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (298486374, 'MyText', '2024-01-26 16:29:07', '2024-02-02 15:00:22.744218', '2024-02-02 15:00:22.744218');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (980190962, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 15:00:22.745225', '2024-02-02 15:00:22.745225');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (298486374, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 15:00:22.745225', '2024-02-02 15:00:22.745225');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (980190962, '2024-02-02 15:00:22.746266', '2024-02-02 15:00:22.746266');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (298486374, '2024-02-02 15:00:22.746266', '2024-02-02 15:00:22.746266')[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.2ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mFixtures Load (0.5ms)[0m  [1m[31mDELETE FROM "bblogs";
+DELETE FROM "comments";
+DELETE FROM "posts";
+DELETE FROM "users";
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (980190962, 'MyText', 'MyString', 'MyString', '2024-02-02 15:00:22.835219', '2024-02-02 15:00:22.835219');
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (298486374, 'MyText', 'MyString', 'MyString', '2024-02-02 15:00:22.835219', '2024-02-02 15:00:22.835219');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (980190962, 'MyText', '2024-01-26 16:29:07', '2024-02-02 15:00:22.835285', '2024-02-02 15:00:22.835285');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (298486374, 'MyText', '2024-01-26 16:29:07', '2024-02-02 15:00:22.835285', '2024-02-02 15:00:22.835285');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (980190962, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 15:00:22.835336', '2024-02-02 15:00:22.835336');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (298486374, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 15:00:22.835336', '2024-02-02 15:00:22.835336');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (980190962, '2024-02-02 15:00:22.835371', '2024-02-02 15:00:22.835371');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (298486374, '2024-02-02 15:00:22.835371', '2024-02-02 15:00:22.835371')[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mFixtures Load (0.8ms)[0m  [1m[31mDELETE FROM "bblogs";
+DELETE FROM "comments";
+DELETE FROM "posts";
+DELETE FROM "users";
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (980190962, 'MyText', 'MyString', 'MyString', '2024-02-02 15:00:22.841860', '2024-02-02 15:00:22.841860');
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (298486374, 'MyText', 'MyString', 'MyString', '2024-02-02 15:00:22.841860', '2024-02-02 15:00:22.841860');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (980190962, 'MyText', '2024-01-26 16:29:07', '2024-02-02 15:00:22.841921', '2024-02-02 15:00:22.841921');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (298486374, 'MyText', '2024-01-26 16:29:07', '2024-02-02 15:00:22.841921', '2024-02-02 15:00:22.841921');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (980190962, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 15:00:22.841964', '2024-02-02 15:00:22.841964');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (298486374, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 15:00:22.841964', '2024-02-02 15:00:22.841964');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (980190962, '2024-02-02 15:00:22.841998', '2024-02-02 15:00:22.841998');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (298486374, '2024-02-02 15:00:22.841998', '2024-02-02 15:00:22.841998')[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mFixtures Load (0.4ms)[0m  [1m[31mDELETE FROM "bblogs";
+DELETE FROM "comments";
+DELETE FROM "posts";
+DELETE FROM "users";
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (980190962, 'MyText', 'MyString', 'MyString', '2024-02-02 15:00:22.848726', '2024-02-02 15:00:22.848726');
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (298486374, 'MyText', 'MyString', 'MyString', '2024-02-02 15:00:22.848726', '2024-02-02 15:00:22.848726');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (980190962, 'MyText', '2024-01-26 16:29:07', '2024-02-02 15:00:22.848791', '2024-02-02 15:00:22.848791');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (298486374, 'MyText', '2024-01-26 16:29:07', '2024-02-02 15:00:22.848791', '2024-02-02 15:00:22.848791');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (980190962, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 15:00:22.848827', '2024-02-02 15:00:22.848827');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (298486374, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 15:00:22.848827', '2024-02-02 15:00:22.848827');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (980190962, '2024-02-02 15:00:22.848860', '2024-02-02 15:00:22.848860');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (298486374, '2024-02-02 15:00:22.848860', '2024-02-02 15:00:22.848860')[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mFixtures Load (0.5ms)[0m  [1m[31mDELETE FROM "bblogs";
+DELETE FROM "comments";
+DELETE FROM "posts";
+DELETE FROM "users";
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (980190962, 'MyText', 'MyString', 'MyString', '2024-02-02 15:00:22.855245', '2024-02-02 15:00:22.855245');
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (298486374, 'MyText', 'MyString', 'MyString', '2024-02-02 15:00:22.855245', '2024-02-02 15:00:22.855245');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (980190962, 'MyText', '2024-01-26 16:29:07', '2024-02-02 15:00:22.855310', '2024-02-02 15:00:22.855310');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (298486374, 'MyText', '2024-01-26 16:29:07', '2024-02-02 15:00:22.855310', '2024-02-02 15:00:22.855310');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (980190962, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 15:00:22.855349', '2024-02-02 15:00:22.855349');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (298486374, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 15:00:22.855349', '2024-02-02 15:00:22.855349');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (980190962, '2024-02-02 15:00:22.855385', '2024-02-02 15:00:22.855385');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (298486374, '2024-02-02 15:00:22.855385', '2024-02-02 15:00:22.855385')[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mFixtures Load (0.5ms)[0m  [1m[31mDELETE FROM "bblogs";
+DELETE FROM "comments";
+DELETE FROM "posts";
+DELETE FROM "users";
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (980190962, 'MyText', 'MyString', 'MyString', '2024-02-02 15:00:22.863719', '2024-02-02 15:00:22.863719');
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (298486374, 'MyText', 'MyString', 'MyString', '2024-02-02 15:00:22.863719', '2024-02-02 15:00:22.863719');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (980190962, 'MyText', '2024-01-26 16:29:07', '2024-02-02 15:00:22.863779', '2024-02-02 15:00:22.863779');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (298486374, 'MyText', '2024-01-26 16:29:07', '2024-02-02 15:00:22.863779', '2024-02-02 15:00:22.863779');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (980190962, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 15:00:22.863810', '2024-02-02 15:00:22.863810');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (298486374, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 15:00:22.863810', '2024-02-02 15:00:22.863810');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (980190962, '2024-02-02 15:00:22.863840', '2024-02-02 15:00:22.863840');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (298486374, '2024-02-02 15:00:22.863840', '2024-02-02 15:00:22.863840')[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.2ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mFixtures Load (0.5ms)[0m  [1m[31mDELETE FROM "bblogs";
+DELETE FROM "comments";
+DELETE FROM "posts";
+DELETE FROM "users";
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (980190962, 'MyText', 'MyString', 'MyString', '2024-02-02 15:00:22.870374', '2024-02-02 15:00:22.870374');
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (298486374, 'MyText', 'MyString', 'MyString', '2024-02-02 15:00:22.870374', '2024-02-02 15:00:22.870374');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (980190962, 'MyText', '2024-01-26 16:29:07', '2024-02-02 15:00:22.870438', '2024-02-02 15:00:22.870438');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (298486374, 'MyText', '2024-01-26 16:29:07', '2024-02-02 15:00:22.870438', '2024-02-02 15:00:22.870438');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (980190962, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 15:00:22.870479', '2024-02-02 15:00:22.870479');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (298486374, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 15:00:22.870479', '2024-02-02 15:00:22.870479');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (980190962, '2024-02-02 15:00:22.870517', '2024-02-02 15:00:22.870517');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (298486374, '2024-02-02 15:00:22.870517', '2024-02-02 15:00:22.870517')[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mFixtures Load (0.5ms)[0m  [1m[31mDELETE FROM "bblogs";
+DELETE FROM "comments";
+DELETE FROM "posts";
+DELETE FROM "users";
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (980190962, 'MyText', 'MyString', 'MyString', '2024-02-02 15:00:22.878559', '2024-02-02 15:00:22.878559');
+INSERT INTO "bblogs" ("id", "custom_domain", "title", "theme", "created_at", "updated_at") VALUES (298486374, 'MyText', 'MyString', 'MyString', '2024-02-02 15:00:22.878559', '2024-02-02 15:00:22.878559');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (980190962, 'MyText', '2024-01-26 16:29:07', '2024-02-02 15:00:22.878615', '2024-02-02 15:00:22.878615');
+INSERT INTO "comments" ("id", "content", "date", "created_at", "updated_at") VALUES (298486374, 'MyText', '2024-01-26 16:29:07', '2024-02-02 15:00:22.878615', '2024-02-02 15:00:22.878615');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (980190962, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 15:00:22.878651', '2024-02-02 15:00:22.878651');
+INSERT INTO "posts" ("id", "title", "content", "author_name", "published_at", "created_at", "updated_at") VALUES (298486374, 'MyString', 'MyText', 'MyString', '2024-01-26 12:41:35', '2024-02-02 15:00:22.878651', '2024-02-02 15:00:22.878651');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (980190962, '2024-02-02 15:00:22.878697', '2024-02-02 15:00:22.878697');
+INSERT INTO "users" ("id", "created_at", "updated_at") VALUES (298486374, '2024-02-02 15:00:22.878697', '2024-02-02 15:00:22.878697')[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
