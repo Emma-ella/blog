@@ -19497,3 +19497,897 @@ Did you mean?  bblog_posts_path):
   
 app/controllers/posts_controller.rb:60:in `block (2 levels) in destroy'
 app/controllers/posts_controller.rb:59:in `destroy'
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.2ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "bblogs"[0m
+  [1m[35m (9.8ms)[0m  [1m[35mCREATE TABLE "bblogs" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "custom_domain" text, "title" varchar, "theme" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "comments"[0m
+  [1m[35m (13.8ms)[0m  [1m[35mCREATE TABLE "comments" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "content" text, "date" datetime(6), "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "post_id" integer NOT NULL)[0m
+  [1m[35m (11.4ms)[0m  [1m[35mCREATE INDEX "index_comments_on_post_id" ON "comments" ("post_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "posts"[0m
+  [1m[35m (10.8ms)[0m  [1m[35mCREATE TABLE "posts" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "title" varchar, "content" text, "author_name" varchar, "published_at" datetime(6), "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "bblog_id" integer)[0m
+  [1m[35m (13.8ms)[0m  [1m[35mCREATE INDEX "index_posts_on_bblog_id" ON "posts" ("bblog_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "users"[0m
+  [1m[35m (10.0ms)[0m  [1m[35mCREATE TABLE "users" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "email" varchar DEFAULT '' NOT NULL, "encrypted_password" varchar DEFAULT '' NOT NULL, "reset_password_token" varchar, "reset_password_sent_at" datetime(6), "remember_created_at" datetime(6), "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (12.2ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_users_on_email" ON "users" ("email")[0m
+  [1m[35m (12.6ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_users_on_reset_password_token" ON "users" ("reset_password_token")[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TEMPORARY TABLE "acomments" ("id" integer NOT NULL PRIMARY KEY, "content" text DEFAULT NULL, "date" datetime(6) DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "post_id" integer NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "tindex_acomments_on_post_id" ON "acomments" ("post_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "acomments" ("id","content","date","created_at","updated_at","post_id")
+                     SELECT "id","content","date","created_at","updated_at","post_id" FROM "comments"[0m
+  [1m[35m (0.4ms)[0m  [1m[35mDROP TABLE "comments"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "comments" ("id" integer NOT NULL PRIMARY KEY, "content" text DEFAULT NULL, "date" datetime(6) DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "post_id" integer NOT NULL, CONSTRAINT "fk_rails_2fd19c0db7"
+FOREIGN KEY ("post_id")
+  REFERENCES "posts" ("id")
+)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_comments_on_post_id" ON "comments" ("post_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "comments" ("id","content","date","created_at","updated_at","post_id")
+                     SELECT "id","content","date","created_at","updated_at","post_id" FROM "acomments"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE "acomments"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[36mTRANSACTION (7.9ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE TEMPORARY TABLE "aposts" ("id" integer NOT NULL PRIMARY KEY, "title" varchar DEFAULT NULL, "content" text DEFAULT NULL, "author_name" varchar DEFAULT NULL, "published_at" datetime(6) DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "bblog_id" integer DEFAULT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "tindex_aposts_on_bblog_id" ON "aposts" ("bblog_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "aposts" ("id","title","content","author_name","published_at","created_at","updated_at","bblog_id")
+                     SELECT "id","title","content","author_name","published_at","created_at","updated_at","bblog_id" FROM "posts"[0m
+  [1m[35m (0.4ms)[0m  [1m[35mDROP TABLE "posts"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "posts" ("id" integer NOT NULL PRIMARY KEY, "title" varchar DEFAULT NULL, "content" text DEFAULT NULL, "author_name" varchar DEFAULT NULL, "published_at" datetime(6) DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "bblog_id" integer DEFAULT NULL, CONSTRAINT "fk_rails_ab2138f06e"
+FOREIGN KEY ("bblog_id")
+  REFERENCES "bblogs" ("id")
+)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_posts_on_bblog_id" ON "posts" ("bblog_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "posts" ("id","title","content","author_name","published_at","created_at","updated_at","bblog_id")
+                     SELECT "id","title","content","author_name","published_at","created_at","updated_at","bblog_id" FROM "aposts"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE "aposts"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[36mTRANSACTION (10.8ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (9.8ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (12.3ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20240202144335)[0m
+  [1m[35m (7.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES
+(20240124152604),
+(20240126110149),
+(20240126114135),
+(20240126152907),
+(20240130105225);
+
+[0m
+  [1m[35m (14.1ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.3ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["key", "environment"], ["value", "development"], ["created_at", "2024-02-02 16:02:57.742092"], ["updated_at", "2024-02-02 16:02:57.742092"]]
+  [1m[36mTRANSACTION (8.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "schema_sha1"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.2ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["key", "schema_sha1"], ["value", "f4d2baff8acc7237a488892d2247d646df22a670"], ["created_at", "2024-02-02 16:02:57.757675"], ["updated_at", "2024-02-02 16:02:57.757675"]]
+  [1m[36mTRANSACTION (10.6ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "bblogs"[0m
+  [1m[35m (11.4ms)[0m  [1m[35mCREATE TABLE "bblogs" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "custom_domain" text, "title" varchar, "theme" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "comments"[0m
+  [1m[35m (10.7ms)[0m  [1m[35mCREATE TABLE "comments" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "content" text, "date" datetime(6), "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "post_id" integer NOT NULL)[0m
+  [1m[35m (14.0ms)[0m  [1m[35mCREATE INDEX "index_comments_on_post_id" ON "comments" ("post_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "posts"[0m
+  [1m[35m (10.1ms)[0m  [1m[35mCREATE TABLE "posts" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "title" varchar, "content" text, "author_name" varchar, "published_at" datetime(6), "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "bblog_id" integer)[0m
+  [1m[35m (12.7ms)[0m  [1m[35mCREATE INDEX "index_posts_on_bblog_id" ON "posts" ("bblog_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "users"[0m
+  [1m[35m (12.8ms)[0m  [1m[35mCREATE TABLE "users" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "email" varchar DEFAULT '' NOT NULL, "encrypted_password" varchar DEFAULT '' NOT NULL, "reset_password_token" varchar, "reset_password_sent_at" datetime(6), "remember_created_at" datetime(6), "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (10.3ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_users_on_email" ON "users" ("email")[0m
+  [1m[35m (13.9ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_users_on_reset_password_token" ON "users" ("reset_password_token")[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TEMPORARY TABLE "acomments" ("id" integer NOT NULL PRIMARY KEY, "content" text DEFAULT NULL, "date" datetime(6) DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "post_id" integer NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "tindex_acomments_on_post_id" ON "acomments" ("post_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "acomments" ("id","content","date","created_at","updated_at","post_id")
+                     SELECT "id","content","date","created_at","updated_at","post_id" FROM "comments"[0m
+  [1m[35m (0.4ms)[0m  [1m[35mDROP TABLE "comments"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "comments" ("id" integer NOT NULL PRIMARY KEY, "content" text DEFAULT NULL, "date" datetime(6) DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "post_id" integer NOT NULL, CONSTRAINT "fk_rails_2fd19c0db7"
+FOREIGN KEY ("post_id")
+  REFERENCES "posts" ("id")
+)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_comments_on_post_id" ON "comments" ("post_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "comments" ("id","content","date","created_at","updated_at","post_id")
+                     SELECT "id","content","date","created_at","updated_at","post_id" FROM "acomments"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE "acomments"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[36mTRANSACTION (8.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE TEMPORARY TABLE "aposts" ("id" integer NOT NULL PRIMARY KEY, "title" varchar DEFAULT NULL, "content" text DEFAULT NULL, "author_name" varchar DEFAULT NULL, "published_at" datetime(6) DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "bblog_id" integer DEFAULT NULL)[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE INDEX "tindex_aposts_on_bblog_id" ON "aposts" ("bblog_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "aposts" ("id","title","content","author_name","published_at","created_at","updated_at","bblog_id")
+                     SELECT "id","title","content","author_name","published_at","created_at","updated_at","bblog_id" FROM "posts"[0m
+  [1m[35m (0.5ms)[0m  [1m[35mDROP TABLE "posts"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE TABLE "posts" ("id" integer NOT NULL PRIMARY KEY, "title" varchar DEFAULT NULL, "content" text DEFAULT NULL, "author_name" varchar DEFAULT NULL, "published_at" datetime(6) DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "bblog_id" integer DEFAULT NULL, CONSTRAINT "fk_rails_ab2138f06e"
+FOREIGN KEY ("bblog_id")
+  REFERENCES "bblogs" ("id")
+)[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE INDEX "index_posts_on_bblog_id" ON "posts" ("bblog_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "posts" ("id","title","content","author_name","published_at","created_at","updated_at","bblog_id")
+                     SELECT "id","title","content","author_name","published_at","created_at","updated_at","bblog_id" FROM "aposts"[0m
+  [1m[35m (0.3ms)[0m  [1m[35mDROP TABLE "aposts"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[36mTRANSACTION (10.7ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (11.6ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (9.4ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20240202144335)[0m
+  [1m[35m (9.6ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES
+(20240124152604),
+(20240126110149),
+(20240126114135),
+(20240126152907),
+(20240130105225);
+
+[0m
+  [1m[35m (11.2ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.3ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["key", "environment"], ["value", "development"], ["created_at", "2024-02-02 16:02:58.001175"], ["updated_at", "2024-02-02 16:02:58.001175"]]
+  [1m[36mTRANSACTION (10.9ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Update (0.3ms)[0m  [1m[33mUPDATE "ar_internal_metadata" SET "value" = ?, "updated_at" = ? WHERE "ar_internal_metadata"."key" = ?[0m  [["value", "test"], ["updated_at", "2024-02-02 16:02:58.018969"], ["key", "environment"]]
+  [1m[36mTRANSACTION (7.8ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "schema_sha1"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.3ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["key", "schema_sha1"], ["value", "f4d2baff8acc7237a488892d2247d646df22a670"], ["created_at", "2024-02-02 16:02:58.033407"], ["updated_at", "2024-02-02 16:02:58.033407"]]
+  [1m[36mTRANSACTION (10.9ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Started GET "/bblogs/1/posts/new" for ::1 at 2024-02-02 17:03:30 +0100
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by PostsController#new as HTML
+  Parameters: {"bblog_id"=>"1"}
+  Rendering layout layouts/application.html.erb
+  Rendering posts/new.html.erb within layouts/application
+  Rendered posts/_form.html.erb (Duration: 11.9ms | Allocations: 4506)
+  Rendered posts/new.html.erb within layouts/application (Duration: 13.2ms | Allocations: 5261)
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/home/_header.html.erb:22
+  Rendered home/_header.html.erb (Duration: 10.1ms | Allocations: 4833)
+  Rendered layout layouts/application.html.erb (Duration: 95.2ms | Allocations: 43599)
+Completed 200 OK in 128ms (Views: 97.0ms | ActiveRecord: 1.2ms | Allocations: 71883)
+
+
+Started GET "/bblogs" for ::1 at 2024-02-02 17:03:33 +0100
+Processing by BblogsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering bblogs/index.html.erb within layouts/application
+  [1m[36mBblog Load (0.2ms)[0m  [1m[34mSELECT "bblogs".* FROM "bblogs"[0m
+  ↳ app/views/bblogs/index.html.erb:6
+  Rendered bblogs/index.html.erb within layouts/application (Duration: 1.9ms | Allocations: 906)
+  Rendered home/_header.html.erb (Duration: 0.5ms | Allocations: 355)
+  Rendered layout layouts/application.html.erb (Duration: 5.3ms | Allocations: 3295)
+Completed 200 OK in 10ms (Views: 6.7ms | ActiveRecord: 0.2ms | Allocations: 6008)
+
+
+Started GET "/home/about" for ::1 at 2024-02-02 17:03:36 +0100
+Processing by HomeController#about as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering home/about.html.erb within layouts/application
+  Rendered home/about.html.erb within layouts/application (Duration: 0.5ms | Allocations: 131)
+  Rendered home/_header.html.erb (Duration: 1.3ms | Allocations: 354)
+  Rendered layout layouts/application.html.erb (Duration: 5.4ms | Allocations: 2516)
+Completed 200 OK in 8ms (Views: 6.9ms | ActiveRecord: 0.0ms | Allocations: 3534)
+
+
+Started GET "/bblogs" for ::1 at 2024-02-02 17:03:37 +0100
+Processing by BblogsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering bblogs/index.html.erb within layouts/application
+  [1m[36mBblog Load (0.2ms)[0m  [1m[34mSELECT "bblogs".* FROM "bblogs"[0m
+  ↳ app/views/bblogs/index.html.erb:6
+  Rendered bblogs/index.html.erb within layouts/application (Duration: 2.4ms | Allocations: 567)
+  Rendered home/_header.html.erb (Duration: 1.6ms | Allocations: 282)
+  Rendered layout layouts/application.html.erb (Duration: 10.2ms | Allocations: 2608)
+Completed 200 OK in 12ms (Views: 11.1ms | ActiveRecord: 0.2ms | Allocations: 2966)
+
+
+Started GET "/bblogs" for ::1 at 2024-02-02 17:03:43 +0100
+Processing by BblogsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering bblogs/index.html.erb within layouts/application
+  [1m[36mBblog Load (0.2ms)[0m  [1m[34mSELECT "bblogs".* FROM "bblogs"[0m
+  ↳ app/views/bblogs/index.html.erb:6
+  Rendered bblogs/index.html.erb within layouts/application (Duration: 1.8ms | Allocations: 502)
+  Rendered home/_header.html.erb (Duration: 0.8ms | Allocations: 282)
+  Rendered layout layouts/application.html.erb (Duration: 8.9ms | Allocations: 2544)
+Completed 200 OK in 11ms (Views: 9.7ms | ActiveRecord: 0.2ms | Allocations: 2882)
+
+
+Started GET "/home/about" for ::1 at 2024-02-02 17:03:44 +0100
+Processing by HomeController#about as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering home/about.html.erb within layouts/application
+  Rendered home/about.html.erb within layouts/application (Duration: 0.1ms | Allocations: 7)
+  Rendered home/_header.html.erb (Duration: 0.7ms | Allocations: 282)
+  Rendered layout layouts/application.html.erb (Duration: 8.5ms | Allocations: 2068)
+Completed 200 OK in 10ms (Views: 9.2ms | ActiveRecord: 0.0ms | Allocations: 2387)
+
+
+Started GET "/bblogs" for ::1 at 2024-02-02 17:03:45 +0100
+Processing by BblogsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering bblogs/index.html.erb within layouts/application
+  [1m[36mBblog Load (0.1ms)[0m  [1m[34mSELECT "bblogs".* FROM "bblogs"[0m
+  ↳ app/views/bblogs/index.html.erb:6
+  Rendered bblogs/index.html.erb within layouts/application (Duration: 1.5ms | Allocations: 495)
+  Rendered home/_header.html.erb (Duration: 1.0ms | Allocations: 282)
+  Rendered layout layouts/application.html.erb (Duration: 7.2ms | Allocations: 2529)
+Completed 200 OK in 9ms (Views: 8.2ms | ActiveRecord: 0.1ms | Allocations: 2860)
+
+
+Started GET "/bblogs/1/posts/" for ::1 at 2024-02-02 17:04:09 +0100
+Processing by PostsController#index as HTML
+  Parameters: {"bblog_id"=>"1"}
+  [1m[36mBblog Load (0.1ms)[0m  [1m[34mSELECT "bblogs".* FROM "bblogs" WHERE "bblogs"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/posts_controller.rb:7:in `index'
+Completed 404 Not Found in 5ms (ActiveRecord: 1.1ms | Allocations: 2076)
+
+
+  
+ActiveRecord::RecordNotFound (Couldn't find Bblog with 'id'=1):
+  
+app/controllers/posts_controller.rb:7:in `index'
+Started GET "/bblogs" for ::1 at 2024-02-02 17:04:16 +0100
+Processing by BblogsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering bblogs/index.html.erb within layouts/application
+  [1m[36mBblog Load (0.2ms)[0m  [1m[34mSELECT "bblogs".* FROM "bblogs"[0m
+  ↳ app/views/bblogs/index.html.erb:6
+  Rendered bblogs/index.html.erb within layouts/application (Duration: 2.5ms | Allocations: 551)
+  Rendered home/_header.html.erb (Duration: 0.9ms | Allocations: 313)
+  Rendered layout layouts/application.html.erb (Duration: 10.7ms | Allocations: 2823)
+Completed 200 OK in 13ms (Views: 11.7ms | ActiveRecord: 0.2ms | Allocations: 3189)
+
+
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "bblogs"[0m
+  [1m[35m (12.7ms)[0m  [1m[35mCREATE TABLE "bblogs" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "custom_domain" text, "title" varchar, "theme" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "comments"[0m
+  [1m[35m (13.8ms)[0m  [1m[35mCREATE TABLE "comments" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "content" text, "date" datetime(6), "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "post_id" integer NOT NULL)[0m
+  [1m[35m (9.6ms)[0m  [1m[35mCREATE INDEX "index_comments_on_post_id" ON "comments" ("post_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "posts"[0m
+  [1m[35m (12.2ms)[0m  [1m[35mCREATE TABLE "posts" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "title" varchar, "content" text, "author_name" varchar, "published_at" datetime(6), "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "bblog_id" integer)[0m
+  [1m[35m (12.9ms)[0m  [1m[35mCREATE INDEX "index_posts_on_bblog_id" ON "posts" ("bblog_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "users"[0m
+  [1m[35m (9.5ms)[0m  [1m[35mCREATE TABLE "users" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "email" varchar DEFAULT '' NOT NULL, "encrypted_password" varchar DEFAULT '' NOT NULL, "reset_password_token" varchar, "reset_password_sent_at" datetime(6), "remember_created_at" datetime(6), "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (14.0ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_users_on_email" ON "users" ("email")[0m
+  [1m[35m (11.3ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_users_on_reset_password_token" ON "users" ("reset_password_token")[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE TEMPORARY TABLE "acomments" ("id" integer NOT NULL PRIMARY KEY, "content" text DEFAULT NULL, "date" datetime(6) DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "post_id" integer NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "tindex_acomments_on_post_id" ON "acomments" ("post_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "acomments" ("id","content","date","created_at","updated_at","post_id")
+                     SELECT "id","content","date","created_at","updated_at","post_id" FROM "comments"[0m
+  [1m[35m (0.4ms)[0m  [1m[35mDROP TABLE "comments"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "comments" ("id" integer NOT NULL PRIMARY KEY, "content" text DEFAULT NULL, "date" datetime(6) DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "post_id" integer NOT NULL, CONSTRAINT "fk_rails_2fd19c0db7"
+FOREIGN KEY ("post_id")
+  REFERENCES "posts" ("id")
+)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_comments_on_post_id" ON "comments" ("post_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "comments" ("id","content","date","created_at","updated_at","post_id")
+                     SELECT "id","content","date","created_at","updated_at","post_id" FROM "acomments"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE "acomments"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[36mTRANSACTION (8.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE TEMPORARY TABLE "aposts" ("id" integer NOT NULL PRIMARY KEY, "title" varchar DEFAULT NULL, "content" text DEFAULT NULL, "author_name" varchar DEFAULT NULL, "published_at" datetime(6) DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "bblog_id" integer DEFAULT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "tindex_aposts_on_bblog_id" ON "aposts" ("bblog_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "aposts" ("id","title","content","author_name","published_at","created_at","updated_at","bblog_id")
+                     SELECT "id","title","content","author_name","published_at","created_at","updated_at","bblog_id" FROM "posts"[0m
+  [1m[35m (0.4ms)[0m  [1m[35mDROP TABLE "posts"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "posts" ("id" integer NOT NULL PRIMARY KEY, "title" varchar DEFAULT NULL, "content" text DEFAULT NULL, "author_name" varchar DEFAULT NULL, "published_at" datetime(6) DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "bblog_id" integer DEFAULT NULL, CONSTRAINT "fk_rails_ab2138f06e"
+FOREIGN KEY ("bblog_id")
+  REFERENCES "bblogs" ("id")
+)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_posts_on_bblog_id" ON "posts" ("bblog_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "posts" ("id","title","content","author_name","published_at","created_at","updated_at","bblog_id")
+                     SELECT "id","title","content","author_name","published_at","created_at","updated_at","bblog_id" FROM "aposts"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE "aposts"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[36mTRANSACTION (10.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (11.0ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (9.9ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20240202144335)[0m
+  [1m[35m (7.7ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES
+(20240124152604),
+(20240126110149),
+(20240126114135),
+(20240126152907),
+(20240130105225);
+
+[0m
+  [1m[35m (12.1ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.3ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["key", "environment"], ["value", "development"], ["created_at", "2024-02-02 16:05:57.622582"], ["updated_at", "2024-02-02 16:05:57.622582"]]
+  [1m[36mTRANSACTION (6.9ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "schema_sha1"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.2ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["key", "schema_sha1"], ["value", "f4d2baff8acc7237a488892d2247d646df22a670"], ["created_at", "2024-02-02 16:05:57.636445"], ["updated_at", "2024-02-02 16:05:57.636445"]]
+  [1m[36mTRANSACTION (9.8ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "bblogs"[0m
+  [1m[35m (11.0ms)[0m  [1m[35mCREATE TABLE "bblogs" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "custom_domain" text, "title" varchar, "theme" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "comments"[0m
+  [1m[35m (11.8ms)[0m  [1m[35mCREATE TABLE "comments" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "content" text, "date" datetime(6), "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "post_id" integer NOT NULL)[0m
+  [1m[35m (11.3ms)[0m  [1m[35mCREATE INDEX "index_comments_on_post_id" ON "comments" ("post_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "posts"[0m
+  [1m[35m (14.4ms)[0m  [1m[35mCREATE TABLE "posts" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "title" varchar, "content" text, "author_name" varchar, "published_at" datetime(6), "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "bblog_id" integer)[0m
+  [1m[35m (10.2ms)[0m  [1m[35mCREATE INDEX "index_posts_on_bblog_id" ON "posts" ("bblog_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "users"[0m
+  [1m[35m (12.7ms)[0m  [1m[35mCREATE TABLE "users" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "email" varchar DEFAULT '' NOT NULL, "encrypted_password" varchar DEFAULT '' NOT NULL, "reset_password_token" varchar, "reset_password_sent_at" datetime(6), "remember_created_at" datetime(6), "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (12.7ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_users_on_email" ON "users" ("email")[0m
+  [1m[35m (9.9ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_users_on_reset_password_token" ON "users" ("reset_password_token")[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE TEMPORARY TABLE "acomments" ("id" integer NOT NULL PRIMARY KEY, "content" text DEFAULT NULL, "date" datetime(6) DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "post_id" integer NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "tindex_acomments_on_post_id" ON "acomments" ("post_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "acomments" ("id","content","date","created_at","updated_at","post_id")
+                     SELECT "id","content","date","created_at","updated_at","post_id" FROM "comments"[0m
+  [1m[35m (0.4ms)[0m  [1m[35mDROP TABLE "comments"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "comments" ("id" integer NOT NULL PRIMARY KEY, "content" text DEFAULT NULL, "date" datetime(6) DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "post_id" integer NOT NULL, CONSTRAINT "fk_rails_2fd19c0db7"
+FOREIGN KEY ("post_id")
+  REFERENCES "posts" ("id")
+)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_comments_on_post_id" ON "comments" ("post_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "comments" ("id","content","date","created_at","updated_at","post_id")
+                     SELECT "id","content","date","created_at","updated_at","post_id" FROM "acomments"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE "acomments"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[36mTRANSACTION (11.8ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE TEMPORARY TABLE "aposts" ("id" integer NOT NULL PRIMARY KEY, "title" varchar DEFAULT NULL, "content" text DEFAULT NULL, "author_name" varchar DEFAULT NULL, "published_at" datetime(6) DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "bblog_id" integer DEFAULT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "tindex_aposts_on_bblog_id" ON "aposts" ("bblog_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "aposts" ("id","title","content","author_name","published_at","created_at","updated_at","bblog_id")
+                     SELECT "id","title","content","author_name","published_at","created_at","updated_at","bblog_id" FROM "posts"[0m
+  [1m[35m (0.4ms)[0m  [1m[35mDROP TABLE "posts"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "posts" ("id" integer NOT NULL PRIMARY KEY, "title" varchar DEFAULT NULL, "content" text DEFAULT NULL, "author_name" varchar DEFAULT NULL, "published_at" datetime(6) DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "bblog_id" integer DEFAULT NULL, CONSTRAINT "fk_rails_ab2138f06e"
+FOREIGN KEY ("bblog_id")
+  REFERENCES "bblogs" ("id")
+)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_posts_on_bblog_id" ON "posts" ("bblog_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "posts" ("id","title","content","author_name","published_at","created_at","updated_at","bblog_id")
+                     SELECT "id","title","content","author_name","published_at","created_at","updated_at","bblog_id" FROM "aposts"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE "aposts"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[36mTRANSACTION (6.8ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (13.1ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (9.8ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20240202144335)[0m
+  [1m[35m (9.5ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES
+(20240124152604),
+(20240126110149),
+(20240126114135),
+(20240126152907),
+(20240130105225);
+
+[0m
+  [1m[35m (13.1ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.3ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["key", "environment"], ["value", "development"], ["created_at", "2024-02-02 16:05:57.870198"], ["updated_at", "2024-02-02 16:05:57.870198"]]
+  [1m[36mTRANSACTION (7.9ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Update (0.2ms)[0m  [1m[33mUPDATE "ar_internal_metadata" SET "value" = ?, "updated_at" = ? WHERE "ar_internal_metadata"."key" = ?[0m  [["value", "test"], ["updated_at", "2024-02-02 16:05:57.884147"], ["key", "environment"]]
+  [1m[36mTRANSACTION (11.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "schema_sha1"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.2ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["key", "schema_sha1"], ["value", "f4d2baff8acc7237a488892d2247d646df22a670"], ["created_at", "2024-02-02 16:05:57.900482"], ["updated_at", "2024-02-02 16:05:57.900482"]]
+  [1m[36mTRANSACTION (7.9ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Started GET "/bblogs/1/posts/" for ::1 at 2024-02-02 17:06:59 +0100
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by PostsController#index as HTML
+  Parameters: {"bblog_id"=>"1"}
+  [1m[36mBblog Load (0.2ms)[0m  [1m[34mSELECT "bblogs".* FROM "bblogs" WHERE "bblogs"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/posts_controller.rb:7:in `index'
+Completed 404 Not Found in 15ms (ActiveRecord: 0.8ms | Allocations: 9309)
+
+
+  
+ActiveRecord::RecordNotFound (Couldn't find Bblog with 'id'=1):
+  
+app/controllers/posts_controller.rb:7:in `index'
+Started GET "/" for ::1 at 2024-02-02 17:07:03 +0100
+Processing by HomeController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering home/index.html.erb within layouts/application
+  Rendered home/index.html.erb within layouts/application (Duration: 0.5ms | Allocations: 139)
+  Rendered home/_header.html.erb (Duration: 2.7ms | Allocations: 975)
+  Rendered layout layouts/application.html.erb (Duration: 54.6ms | Allocations: 34682)
+Completed 200 OK in 58ms (Views: 56.6ms | ActiveRecord: 0.0ms | Allocations: 36100)
+
+
+Started GET "/home/about" for ::1 at 2024-02-02 17:07:03 +0100
+Processing by HomeController#about as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering home/about.html.erb within layouts/application
+  Rendered home/about.html.erb within layouts/application (Duration: 1.1ms | Allocations: 107)
+  Rendered home/_header.html.erb (Duration: 2.3ms | Allocations: 282)
+  Rendered layout layouts/application.html.erb (Duration: 12.3ms | Allocations: 2145)
+Completed 200 OK in 16ms (Views: 14.1ms | ActiveRecord: 0.0ms | Allocations: 2536)
+
+
+Started GET "/bblogs" for ::1 at 2024-02-02 17:07:04 +0100
+Processing by BblogsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering bblogs/index.html.erb within layouts/application
+  [1m[36mBblog Load (0.4ms)[0m  [1m[34mSELECT "bblogs".* FROM "bblogs"[0m
+  ↳ app/views/bblogs/index.html.erb:6
+  Rendered bblogs/index.html.erb within layouts/application (Duration: 5.0ms | Allocations: 875)
+  Rendered home/_header.html.erb (Duration: 1.6ms | Allocations: 354)
+  Rendered layout layouts/application.html.erb (Duration: 17.7ms | Allocations: 3256)
+Completed 200 OK in 25ms (Views: 22.3ms | ActiveRecord: 0.4ms | Allocations: 4292)
+
+
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mBblog Create (0.9ms)[0m  [1m[32mINSERT INTO "bblogs" ("custom_domain", "title", "theme", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["custom_domain", "hi there"], ["title", "ella'sblog"], ["theme", "blue!"], ["created_at", "2024-02-02 16:14:21.036452"], ["updated_at", "2024-02-02 16:14:21.036452"]]
+  [1m[36mTRANSACTION (8.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mBblog Load (0.3ms)[0m  [1m[34mSELECT "bblogs".* FROM "bblogs" WHERE "bblogs"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mBblog Load (0.5ms)[0m  [1m[34mSELECT "bblogs".* FROM "bblogs"[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mBblog Create (0.7ms)[0m  [1m[32mINSERT INTO "bblogs" ("custom_domain", "title", "theme", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["custom_domain", "hi there"], ["title", "emma'sblog"], ["theme", "blue!"], ["created_at", "2024-02-02 16:15:51.049615"], ["updated_at", "2024-02-02 16:15:51.049615"]]
+  [1m[36mTRANSACTION (8.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mBblog Load (0.1ms)[0m  [1m[34mSELECT "bblogs".* FROM "bblogs"[0m
+Started GET "/bblogs" for ::1 at 2024-02-02 17:16:26 +0100
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by BblogsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering bblogs/index.html.erb within layouts/application
+  [1m[36mBblog Load (0.2ms)[0m  [1m[34mSELECT "bblogs".* FROM "bblogs"[0m
+  ↳ app/views/bblogs/index.html.erb:6
+  Rendered bblogs/index.html.erb within layouts/application (Duration: 15.9ms | Allocations: 17188)
+  Rendered home/_header.html.erb (Duration: 2.7ms | Allocations: 899)
+  Rendered layout layouts/application.html.erb (Duration: 94.5ms | Allocations: 52291)
+Completed 200 OK in 109ms (Views: 95.9ms | ActiveRecord: 1.5ms | Allocations: 62042)
+
+
+Started GET "/bblogs/1/posts" for ::1 at 2024-02-02 17:16:28 +0100
+Processing by PostsController#index as HTML
+  Parameters: {"bblog_id"=>"1"}
+  [1m[36mBblog Load (0.2ms)[0m  [1m[34mSELECT "bblogs".* FROM "bblogs" WHERE "bblogs"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/posts_controller.rb:7:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts"[0m
+  ↳ app/views/posts/index.html.erb:6
+  Rendered posts/index.html.erb within layouts/application (Duration: 2.5ms | Allocations: 1555)
+  Rendered home/_header.html.erb (Duration: 0.4ms | Allocations: 318)
+  Rendered layout layouts/application.html.erb (Duration: 5.2ms | Allocations: 3476)
+Completed 200 OK in 14ms (Views: 6.4ms | ActiveRecord: 0.3ms | Allocations: 10664)
+
+
+Started GET "/bblogs/1/posts/new" for ::1 at 2024-02-02 17:16:30 +0100
+Processing by PostsController#new as HTML
+  Parameters: {"bblog_id"=>"1"}
+  Rendering layout layouts/application.html.erb
+  Rendering posts/new.html.erb within layouts/application
+  Rendered posts/_form.html.erb (Duration: 14.6ms | Allocations: 4174)
+  Rendered posts/new.html.erb within layouts/application (Duration: 16.6ms | Allocations: 4506)
+  Rendered home/_header.html.erb (Duration: 1.0ms | Allocations: 291)
+  Rendered layout layouts/application.html.erb (Duration: 23.1ms | Allocations: 6327)
+Completed 200 OK in 51ms (Views: 24.3ms | ActiveRecord: 1.1ms | Allocations: 21845)
+
+
+Started POST "/posts" for ::1 at 2024-02-02 17:16:34 +0100
+Processing by PostsController#create as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "post"=>{"title"=>"Audacity", "content"=>"", "author_name"=>"", "published_at"=>""}, "commit"=>"Create Post"}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/posts_controller.rb:32:in `block in create'
+  [1m[36mPost Create (0.5ms)[0m  [1m[32mINSERT INTO "posts" ("title", "content", "author_name", "published_at", "created_at", "updated_at", "bblog_id") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "Audacity"], ["content", ""], ["author_name", ""], ["published_at", nil], ["created_at", "2024-02-02 16:16:34.253623"], ["updated_at", "2024-02-02 16:16:34.253623"], ["bblog_id", nil]]
+  ↳ app/controllers/posts_controller.rb:32:in `block in create'
+  [1m[36mTRANSACTION (5.5ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/posts_controller.rb:32:in `block in create'
+Redirected to http://localhost:3000/posts/1
+Completed 302 Found in 17ms (ActiveRecord: 6.1ms | Allocations: 4500)
+
+
+Started GET "/posts/1" for ::1 at 2024-02-02 17:16:34 +0100
+Processing by PostsController#show as TURBO_STREAM
+  Parameters: {"id"=>"1"}
+  [1m[36mPost Load (0.3ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/posts_controller.rb:68:in `set_post'
+  [1m[36mCACHE Post Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/posts_controller.rb:14:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering posts/show.html.erb within layouts/application
+  Rendered posts/_post.html.erb (Duration: 0.7ms | Allocations: 330)
+  [1m[36mComment Load (0.2ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  ↳ app/views/posts/show.html.erb:17
+  Rendered collection of comments/_comment.html.erb [1 times] (Duration: 0.9ms | Allocations: 360)
+  Rendered comments/_form.html.erb (Duration: 3.2ms | Allocations: 1997)
+  Rendered posts/show.html.erb within layouts/application (Duration: 10.3ms | Allocations: 6262)
+  Rendered home/_header.html.erb (Duration: 0.5ms | Allocations: 297)
+  Rendered layout layouts/application.html.erb (Duration: 13.5ms | Allocations: 8075)
+Completed 200 OK in 43ms (Views: 13.9ms | ActiveRecord: 1.5ms | Allocations: 31663)
+
+
+Started DELETE "/posts/1" for ::1 at 2024-02-02 17:16:36 +0100
+Processing by PostsController#destroy as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "id"=>"1"}
+  [1m[36mPost Load (0.3ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/posts_controller.rb:68:in `set_post'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/posts_controller.rb:57:in `destroy'
+  [1m[36mComment Load (0.1ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  ↳ app/controllers/posts_controller.rb:57:in `destroy'
+  [1m[36mPost Destroy (0.3ms)[0m  [1m[31mDELETE FROM "posts" WHERE "posts"."id" = ?[0m  [["id", 1]]
+  ↳ app/controllers/posts_controller.rb:57:in `destroy'
+  [1m[36mTRANSACTION (7.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/posts_controller.rb:57:in `destroy'
+Completed 500 Internal Server Error in 18ms (ActiveRecord: 7.9ms | Allocations: 4223)
+
+
+  
+ActionController::UrlGenerationError (No route matches {:action=>"index", :controller=>"posts", :id=>"1"}, missing required keys: [:bblog_id]
+Did you mean?  bblog_posts_path):
+  
+app/controllers/posts_controller.rb:60:in `block (2 levels) in destroy'
+app/controllers/posts_controller.rb:59:in `destroy'
+Started GET "/bblogs/1/posts/new" for ::1 at 2024-02-02 17:16:44 +0100
+Processing by PostsController#new as HTML
+  Parameters: {"bblog_id"=>"1"}
+  Rendering layout layouts/application.html.erb
+  Rendering posts/new.html.erb within layouts/application
+  Rendered posts/_form.html.erb (Duration: 5.9ms | Allocations: 1759)
+  Rendered posts/new.html.erb within layouts/application (Duration: 6.5ms | Allocations: 1846)
+  Rendered home/_header.html.erb (Duration: 0.9ms | Allocations: 285)
+  Rendered layout layouts/application.html.erb (Duration: 12.0ms | Allocations: 3632)
+Completed 200 OK in 15ms (Views: 13.5ms | ActiveRecord: 0.0ms | Allocations: 4010)
+
+
+Started GET "/bblogs/1/posts/new" for ::1 at 2024-02-02 17:16:44 +0100
+Processing by PostsController#new as HTML
+  Parameters: {"bblog_id"=>"1"}
+  Rendering layout layouts/application.html.erb
+  Rendering posts/new.html.erb within layouts/application
+  Rendered posts/_form.html.erb (Duration: 5.5ms | Allocations: 1615)
+  Rendered posts/new.html.erb within layouts/application (Duration: 5.9ms | Allocations: 1700)
+  Rendered home/_header.html.erb (Duration: 0.4ms | Allocations: 267)
+  Rendered layout layouts/application.html.erb (Duration: 8.5ms | Allocations: 3358)
+Completed 200 OK in 10ms (Views: 9.0ms | ActiveRecord: 0.0ms | Allocations: 3693)
+
+
+Started GET "/posts" for ::1 at 2024-02-02 17:16:47 +0100
+Processing by PostsController#index as HTML
+Completed 404 Not Found in 1ms (ActiveRecord: 0.0ms | Allocations: 573)
+
+
+  
+ActiveRecord::RecordNotFound (Couldn't find Bblog without an ID):
+  
+app/controllers/posts_controller.rb:7:in `index'
+Started GET "/bblogs/1/posts/new" for ::1 at 2024-02-02 17:16:51 +0100
+Processing by PostsController#new as HTML
+  Parameters: {"bblog_id"=>"1"}
+  Rendering layout layouts/application.html.erb
+  Rendering posts/new.html.erb within layouts/application
+  Rendered posts/_form.html.erb (Duration: 6.1ms | Allocations: 1609)
+  Rendered posts/new.html.erb within layouts/application (Duration: 7.6ms | Allocations: 1694)
+  Rendered home/_header.html.erb (Duration: 1.0ms | Allocations: 267)
+  Rendered layout layouts/application.html.erb (Duration: 15.1ms | Allocations: 3359)
+Completed 200 OK in 17ms (Views: 16.3ms | ActiveRecord: 0.0ms | Allocations: 3695)
+
+
+Started GET "/bblogs/1/posts" for ::1 at 2024-02-02 17:16:56 +0100
+Processing by PostsController#index as HTML
+  Parameters: {"bblog_id"=>"1"}
+  [1m[36mBblog Load (0.3ms)[0m  [1m[34mSELECT "bblogs".* FROM "bblogs" WHERE "bblogs"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/posts_controller.rb:7:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (0.2ms)[0m  [1m[34mSELECT "posts".* FROM "posts"[0m
+  ↳ app/views/posts/index.html.erb:6
+  Rendered posts/index.html.erb within layouts/application (Duration: 3.3ms | Allocations: 945)
+  Rendered home/_header.html.erb (Duration: 0.9ms | Allocations: 270)
+  Rendered layout layouts/application.html.erb (Duration: 8.9ms | Allocations: 2611)
+Completed 200 OK in 13ms (Views: 9.7ms | ActiveRecord: 0.5ms | Allocations: 3445)
+
+
+Started GET "/bblogs/1/posts/new" for ::1 at 2024-02-02 17:16:58 +0100
+Processing by PostsController#new as HTML
+  Parameters: {"bblog_id"=>"1"}
+  Rendering layout layouts/application.html.erb
+  Rendering posts/new.html.erb within layouts/application
+  Rendered posts/_form.html.erb (Duration: 5.6ms | Allocations: 1604)
+  Rendered posts/new.html.erb within layouts/application (Duration: 6.8ms | Allocations: 1690)
+  Rendered home/_header.html.erb (Duration: 0.7ms | Allocations: 267)
+  Rendered layout layouts/application.html.erb (Duration: 11.7ms | Allocations: 3348)
+Completed 200 OK in 14ms (Views: 12.6ms | ActiveRecord: 0.0ms | Allocations: 3685)
+
+
+Started POST "/posts" for ::1 at 2024-02-02 17:17:07 +0100
+Processing by PostsController#create as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "post"=>{"title"=>"Audacity", "content"=>"", "author_name"=>"", "published_at"=>"2024-02-02T17:17"}, "commit"=>"Create Post"}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/posts_controller.rb:32:in `block in create'
+  [1m[36mPost Create (0.4ms)[0m  [1m[32mINSERT INTO "posts" ("title", "content", "author_name", "published_at", "created_at", "updated_at", "bblog_id") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "Audacity"], ["content", ""], ["author_name", ""], ["published_at", "2024-02-02 17:17:00"], ["created_at", "2024-02-02 16:17:07.225729"], ["updated_at", "2024-02-02 16:17:07.225729"], ["bblog_id", nil]]
+  ↳ app/controllers/posts_controller.rb:32:in `block in create'
+  [1m[36mTRANSACTION (5.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/posts_controller.rb:32:in `block in create'
+Redirected to http://localhost:3000/posts/1
+Completed 302 Found in 12ms (ActiveRecord: 5.5ms | Allocations: 2695)
+
+
+Started GET "/posts/1" for ::1 at 2024-02-02 17:17:07 +0100
+Processing by PostsController#show as TURBO_STREAM
+  Parameters: {"id"=>"1"}
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/posts_controller.rb:68:in `set_post'
+  [1m[36mCACHE Post Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/posts_controller.rb:14:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering posts/show.html.erb within layouts/application
+  Rendered posts/_post.html.erb (Duration: 0.3ms | Allocations: 55)
+  [1m[36mComment Load (0.1ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  ↳ app/views/posts/show.html.erb:17
+  Rendered collection of comments/_comment.html.erb [1 times] (Duration: 0.1ms | Allocations: 78)
+  Rendered comments/_form.html.erb (Duration: 1.3ms | Allocations: 893)
+  Rendered posts/show.html.erb within layouts/application (Duration: 4.7ms | Allocations: 2530)
+  Rendered home/_header.html.erb (Duration: 0.4ms | Allocations: 267)
+  Rendered layout layouts/application.html.erb (Duration: 7.0ms | Allocations: 4180)
+Completed 200 OK in 11ms (Views: 7.6ms | ActiveRecord: 0.2ms | Allocations: 5587)
+
+
+Started POST "/posts/1/comments" for ::1 at 2024-02-02 17:17:17 +0100
+Processing by CommentsController#create as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "comment"=>{"content"=>"yeah", "date"=>""}, "commit"=>"Create Comment", "post_id"=>"1"}
+  [1m[36mPost Load (0.2ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/comments_controller.rb:3:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/comments_controller.rb:4:in `create'
+  [1m[36mComment Create (0.3ms)[0m  [1m[32mINSERT INTO "comments" ("content", "date", "created_at", "updated_at", "post_id") VALUES (?, ?, ?, ?, ?)[0m  [["content", "yeah"], ["date", nil], ["created_at", "2024-02-02 16:17:17.332484"], ["updated_at", "2024-02-02 16:17:17.332484"], ["post_id", 1]]
+  ↳ app/controllers/comments_controller.rb:4:in `create'
+  [1m[36mTRANSACTION (5.0ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/comments_controller.rb:4:in `create'
+Redirected to http://localhost:3000/posts/1
+Completed 302 Found in 13ms (ActiveRecord: 5.5ms | Allocations: 3697)
+
+
+Started GET "/posts/1" for ::1 at 2024-02-02 17:17:17 +0100
+Processing by PostsController#show as TURBO_STREAM
+  Parameters: {"id"=>"1"}
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/posts_controller.rb:68:in `set_post'
+  [1m[36mCACHE Post Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/posts_controller.rb:14:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering posts/show.html.erb within layouts/application
+  Rendered posts/_post.html.erb (Duration: 0.2ms | Allocations: 46)
+  [1m[36mComment Load (0.1ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  ↳ app/views/posts/show.html.erb:17
+  Rendered collection of comments/_comment.html.erb [2 times] (Duration: 0.3ms | Allocations: 155)
+  Rendered comments/_form.html.erb (Duration: 1.8ms | Allocations: 949)
+  Rendered posts/show.html.erb within layouts/application (Duration: 5.3ms | Allocations: 2706)
+  Rendered home/_header.html.erb (Duration: 0.5ms | Allocations: 285)
+  Rendered layout layouts/application.html.erb (Duration: 8.7ms | Allocations: 4481)
+Completed 200 OK in 12ms (Views: 9.2ms | ActiveRecord: 0.2ms | Allocations: 5881)
+
+
+Started DELETE "/posts/1/comments" for ::1 at 2024-02-02 17:17:21 +0100
+  
+ActionController::RoutingError (No route matches [DELETE] "/posts/1/comments"):
+  
+Started GET "/posts/1" for ::1 at 2024-02-02 17:17:21 +0100
+Processing by PostsController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/posts_controller.rb:68:in `set_post'
+  [1m[36mCACHE Post Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/posts_controller.rb:14:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering posts/show.html.erb within layouts/application
+  Rendered posts/_post.html.erb (Duration: 0.3ms | Allocations: 67)
+  [1m[36mComment Load (0.2ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  ↳ app/views/posts/show.html.erb:17
+  Rendered collection of comments/_comment.html.erb [2 times] (Duration: 0.4ms | Allocations: 148)
+  Rendered comments/_form.html.erb (Duration: 1.6ms | Allocations: 945)
+  Rendered posts/show.html.erb within layouts/application (Duration: 8.4ms | Allocations: 2691)
+  Rendered home/_header.html.erb (Duration: 1.1ms | Allocations: 285)
+  Rendered layout layouts/application.html.erb (Duration: 12.6ms | Allocations: 4464)
+Completed 200 OK in 18ms (Views: 13.4ms | ActiveRecord: 0.3ms | Allocations: 5979)
+
+
+Started GET "/bblogs" for ::1 at 2024-02-02 17:17:23 +0100
+Processing by BblogsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering bblogs/index.html.erb within layouts/application
+  [1m[36mBblog Load (0.2ms)[0m  [1m[34mSELECT "bblogs".* FROM "bblogs"[0m
+  ↳ app/views/bblogs/index.html.erb:6
+  Rendered bblogs/index.html.erb within layouts/application (Duration: 3.2ms | Allocations: 617)
+  Rendered home/_header.html.erb (Duration: 0.9ms | Allocations: 268)
+  Rendered layout layouts/application.html.erb (Duration: 9.6ms | Allocations: 2640)
+Completed 200 OK in 12ms (Views: 10.5ms | ActiveRecord: 0.2ms | Allocations: 2973)
+
+
+Started GET "/bblogs/1/posts" for ::1 at 2024-02-02 17:17:25 +0100
+Processing by PostsController#index as HTML
+  Parameters: {"bblog_id"=>"1"}
+  [1m[36mBblog Load (0.1ms)[0m  [1m[34mSELECT "bblogs".* FROM "bblogs" WHERE "bblogs"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/posts_controller.rb:7:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts"[0m
+  ↳ app/views/posts/index.html.erb:6
+  Rendered posts/_post.html.erb (Duration: 0.1ms | Allocations: 40)
+  Rendered posts/index.html.erb within layouts/application (Duration: 1.8ms | Allocations: 1077)
+  Rendered home/_header.html.erb (Duration: 0.4ms | Allocations: 267)
+  Rendered layout layouts/application.html.erb (Duration: 4.1ms | Allocations: 2740)
+Completed 200 OK in 6ms (Views: 4.6ms | ActiveRecord: 0.2ms | Allocations: 3528)
+
+
+Started GET "/bblogs" for ::1 at 2024-02-02 17:17:28 +0100
+Processing by BblogsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering bblogs/index.html.erb within layouts/application
+  [1m[36mBblog Load (0.2ms)[0m  [1m[34mSELECT "bblogs".* FROM "bblogs"[0m
+  ↳ app/views/bblogs/index.html.erb:6
+  Rendered bblogs/index.html.erb within layouts/application (Duration: 3.5ms | Allocations: 601)
+  Rendered home/_header.html.erb (Duration: 0.9ms | Allocations: 268)
+  Rendered layout layouts/application.html.erb (Duration: 11.8ms | Allocations: 2638)
+Completed 200 OK in 14ms (Views: 12.5ms | ActiveRecord: 0.2ms | Allocations: 2969)
+
+
+Started GET "/bblogs/2/posts" for ::1 at 2024-02-02 17:17:30 +0100
+Processing by PostsController#index as HTML
+  Parameters: {"bblog_id"=>"2"}
+  [1m[36mBblog Load (0.1ms)[0m  [1m[34mSELECT "bblogs".* FROM "bblogs" WHERE "bblogs"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/controllers/posts_controller.rb:7:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts"[0m
+  ↳ app/views/posts/index.html.erb:6
+  Rendered posts/_post.html.erb (Duration: 0.5ms | Allocations: 40)
+  Rendered posts/index.html.erb within layouts/application (Duration: 3.2ms | Allocations: 1078)
+  Rendered home/_header.html.erb (Duration: 0.6ms | Allocations: 267)
+  Rendered layout layouts/application.html.erb (Duration: 7.1ms | Allocations: 2741)
+Completed 200 OK in 10ms (Views: 7.8ms | ActiveRecord: 0.3ms | Allocations: 3526)
+
+
+Started GET "/bblogs" for ::1 at 2024-02-02 17:17:35 +0100
+Processing by BblogsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering bblogs/index.html.erb within layouts/application
+  [1m[36mBblog Load (0.1ms)[0m  [1m[34mSELECT "bblogs".* FROM "bblogs"[0m
+  ↳ app/views/bblogs/index.html.erb:6
+  Rendered bblogs/index.html.erb within layouts/application (Duration: 1.9ms | Allocations: 601)
+  Rendered home/_header.html.erb (Duration: 4.2ms | Allocations: 268)
+  Rendered layout layouts/application.html.erb (Duration: 13.0ms | Allocations: 2624)
+Completed 200 OK in 14ms (Views: 13.7ms | ActiveRecord: 0.1ms | Allocations: 2955)
+
+
+Started GET "/bblogs/1/posts" for ::1 at 2024-02-02 17:17:37 +0100
+Processing by PostsController#index as HTML
+  Parameters: {"bblog_id"=>"1"}
+  [1m[36mBblog Load (0.3ms)[0m  [1m[34mSELECT "bblogs".* FROM "bblogs" WHERE "bblogs"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/posts_controller.rb:7:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering posts/index.html.erb within layouts/application
+  [1m[36mPost Load (4.6ms)[0m  [1m[34mSELECT "posts".* FROM "posts"[0m
+  ↳ app/views/posts/index.html.erb:6
+  Rendered posts/_post.html.erb (Duration: 0.4ms | Allocations: 40)
+  Rendered posts/index.html.erb within layouts/application (Duration: 10.5ms | Allocations: 1086)
+  Rendered home/_header.html.erb (Duration: 0.8ms | Allocations: 267)
+  Rendered layout layouts/application.html.erb (Duration: 28.1ms | Allocations: 2749)
+Completed 200 OK in 40ms (Views: 24.5ms | ActiveRecord: 4.9ms | Allocations: 3535)
+
+
+Started GET "/bblogs/1/posts/new" for ::1 at 2024-02-02 17:17:41 +0100
+Processing by PostsController#new as HTML
+  Parameters: {"bblog_id"=>"1"}
+  Rendering layout layouts/application.html.erb
+  Rendering posts/new.html.erb within layouts/application
+  Rendered posts/_form.html.erb (Duration: 16.4ms | Allocations: 1619)
+  Rendered posts/new.html.erb within layouts/application (Duration: 17.3ms | Allocations: 1704)
+  Rendered home/_header.html.erb (Duration: 3.0ms | Allocations: 267)
+  Rendered layout layouts/application.html.erb (Duration: 31.2ms | Allocations: 3362)
+Completed 200 OK in 34ms (Views: 32.6ms | ActiveRecord: 0.0ms | Allocations: 3700)
+
+
+Started POST "/posts" for ::1 at 2024-02-02 17:17:45 +0100
+Processing by PostsController#create as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "post"=>{"title"=>"yes ", "content"=>"", "author_name"=>"", "published_at"=>""}, "commit"=>"Create Post"}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/posts_controller.rb:32:in `block in create'
+  [1m[36mPost Create (0.6ms)[0m  [1m[32mINSERT INTO "posts" ("title", "content", "author_name", "published_at", "created_at", "updated_at", "bblog_id") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "yes "], ["content", ""], ["author_name", ""], ["published_at", nil], ["created_at", "2024-02-02 16:17:45.634767"], ["updated_at", "2024-02-02 16:17:45.634767"], ["bblog_id", nil]]
+  ↳ app/controllers/posts_controller.rb:32:in `block in create'
+  [1m[36mTRANSACTION (5.7ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/posts_controller.rb:32:in `block in create'
+Redirected to http://localhost:3000/posts/2
+Completed 302 Found in 25ms (ActiveRecord: 6.3ms | Allocations: 2589)
+
+
+Started GET "/posts/2" for ::1 at 2024-02-02 17:17:45 +0100
+Processing by PostsController#show as TURBO_STREAM
+  Parameters: {"id"=>"2"}
+  [1m[36mPost Load (0.2ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/controllers/posts_controller.rb:68:in `set_post'
+  [1m[36mCACHE Post Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/controllers/posts_controller.rb:14:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering posts/show.html.erb within layouts/application
+  Rendered posts/_post.html.erb (Duration: 0.8ms | Allocations: 23)
+  [1m[36mComment Load (0.1ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 2]]
+  ↳ app/views/posts/show.html.erb:17
+  Rendered collection of comments/_comment.html.erb [1 times] (Duration: 0.3ms | Allocations: 75)
+  Rendered comments/_form.html.erb (Duration: 3.3ms | Allocations: 886)
+  Rendered posts/show.html.erb within layouts/application (Duration: 10.8ms | Allocations: 2480)
+  Rendered home/_header.html.erb (Duration: 0.6ms | Allocations: 267)
+  Rendered layout layouts/application.html.erb (Duration: 16.3ms | Allocations: 4130)
+Completed 200 OK in 25ms (Views: 17.0ms | ActiveRecord: 0.4ms | Allocations: 5483)
+
+
+Started DELETE "/posts/2" for ::1 at 2024-02-02 17:17:47 +0100
+Processing by PostsController#destroy as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "id"=>"2"}
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/controllers/posts_controller.rb:68:in `set_post'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/posts_controller.rb:57:in `destroy'
+  [1m[36mComment Load (0.1ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 2]]
+  ↳ app/controllers/posts_controller.rb:57:in `destroy'
+  [1m[36mPost Destroy (0.3ms)[0m  [1m[31mDELETE FROM "posts" WHERE "posts"."id" = ?[0m  [["id", 2]]
+  ↳ app/controllers/posts_controller.rb:57:in `destroy'
+  [1m[36mTRANSACTION (7.0ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/posts_controller.rb:57:in `destroy'
+Completed 500 Internal Server Error in 24ms (ActiveRecord: 7.6ms | Allocations: 3833)
+
+
+  
+ActionController::UrlGenerationError (No route matches {:action=>"index", :controller=>"posts", :id=>"2"}, missing required keys: [:bblog_id]
+Did you mean?  bblog_posts_path):
+  
+app/controllers/posts_controller.rb:60:in `block (2 levels) in destroy'
+app/controllers/posts_controller.rb:59:in `destroy'

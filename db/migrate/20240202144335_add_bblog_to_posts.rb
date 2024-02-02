@@ -1,5 +1,5 @@
 class AddBblogToPosts < ActiveRecord::Migration[7.0]
   def change
-    add_reference :posts, :bblog, null: true, foreign_key: true
+    add_reference :posts, :bblog, null: false, foreign_key: true
   end
 end
