@@ -1,11 +1,10 @@
 class PostsController < ApplicationController
+  before_action :set_bblog, except: %i[ show edit update destroy ]
   before_action :set_post, only: %i[ show edit update destroy ]
 
   # GET /posts or /posts.json
   def index
-    puts params
-    @bblog = Bblog.find(params[:bblog_id])
-    @posts = Post.all
+    @posts = @bblog.posts
     
   end
 
@@ -15,19 +14,18 @@ class PostsController < ApplicationController
     @comment = @post.comments.build 
   end
 
-  # GET /posts/new
+  # GET bblogs/:bblog_id/posts/new
   def new
-    @post = Post.new
+    @post = @bblog.posts.build
   end
 
   # GET /posts/1/edit
   def edit
   end
 
-  # POST /posts or /posts.json
+  # POST /bblogs/:bblog_id/posts or /posts.json
   def create
-    
-    @post = Post.new(post_params)
+    @post = @bblog.posts.build(post_params)
     respond_to do |format|
       if @post.save
         format.html { redirect_to post_url(@post), notice: "Post was successfully created." }
@@ -54,10 +52,11 @@ class PostsController < ApplicationController
 
   # DELETE /posts/1 or /posts/1.json
   def destroy
+    blog_id = @post.bblog_id
     @post.destroy
 
     respond_to do |format|
-      format.html { redirect_to bblog_posts_url(@post.bblog_id), notice: "Post was successfully destroyed." }
+      format.html { redirect_to bblog_posts_url(bblog_id: blog_id), notice: "Post was successfully destroyed." }
       format.json { head :no_content }
     end
   end
@@ -66,8 +65,10 @@ class PostsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_post
       @post = Post.find_by(id: params[:id])
-      
+    end
 
+    def set_bblog
+      @bblog = Bblog.find(params[:bblog_id])
     end
 
     # Only allow a list of trusted parameters through.
