@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-  resources :bblogs, shallow: true do
+  resources :bblogs do
     resources :posts do
       resources :comments
     end

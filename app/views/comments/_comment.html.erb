@@ -12,7 +12,7 @@
 
 
     <p>
-        <%= link_to "Destroy Comment", post_comments_path(comment.id), data: {
+        <%= link_to "Destroy Comment", [comment.post.bblog, comment.post, comment], data: {
                     turbo_method: :delete,
                     turbo_confirm: "Are you sure?"
                     } %>

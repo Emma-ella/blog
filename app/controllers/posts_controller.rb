@@ -28,7 +28,7 @@ class PostsController < ApplicationController
     @post = @bblog.posts.build(post_params)
     respond_to do |format|
       if @post.save
-        format.html { redirect_to post_url(@post), notice: "Post was successfully created." }
+        format.html { redirect_to bblog_post_url(@bblog, @post), notice: "Post was successfully created." }
         format.json { render :show, status: :created, location: @post }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -41,7 +41,7 @@ class PostsController < ApplicationController
   def update
     respond_to do |format|
       if @post.update(post_params)
-        format.html { redirect_to post_url(@post), notice: "Post was successfully updated." }
+        format.html { redirect_to bblog_post_url(@post.bblog, @post), notice: "Post was successfully updated." }
         format.json { render :show, status: :ok, location: @post }
       else
         format.html { render :edit, status: :unprocessable_entity }
