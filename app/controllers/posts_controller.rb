@@ -26,6 +26,7 @@ class PostsController < ApplicationController
   # POST /bblogs/:bblog_id/posts or /posts.json
   def create
     @post = @bblog.posts.build(post_params)
+    authorize @post
     respond_to do |format|
       if @post.save
         format.html { redirect_to bblog_post_url(@bblog, @post), notice: "Post was successfully created." }
@@ -55,6 +56,7 @@ class PostsController < ApplicationController
   # DELETE /posts/1 or /posts/1.json
   def destroy
     blog_id = @post.bblog_id
+    authorize @post
     @post.destroy
 
     respond_to do |format|
