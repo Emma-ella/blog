@@ -3,6 +3,7 @@ class CommentsController < ApplicationController
         @post = Post.find(params[:post_id])
         @comment = @post.comments.create(comment_params)
         redirect_to bblog_post_url(@post.bblog, @post)
+        authorize @post
     end
 
 
@@ -10,6 +11,7 @@ class CommentsController < ApplicationController
         p params
         @post = Post.find(params[:post_id])
         @comment = @post.comments.find(params[:id])
+        authorize @post
         @comment.destroy
         redirect_to bblog_post_url(@post.bblog, @post), notice: 'Comment was successfully destroyed.'
     end

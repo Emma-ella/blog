@@ -14,6 +14,7 @@ class BblogsController < ApplicationController
     end
     def create
         @bblog = Bblog.new(bblog_params) 
+        authorize @bblog
         if @bblog.save
             redirect_to bblogs_url
         else
