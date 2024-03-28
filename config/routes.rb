@@ -2,7 +2,10 @@ Rails.application.routes.draw do
 
   resources :bblogs do
     resources :posts do
-      resources :comments
+      resources :comments do 
+        resources :likes, only: [:create, :destroy]
+
+      end
     end
   end
   

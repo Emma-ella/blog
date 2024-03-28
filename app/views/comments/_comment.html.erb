@@ -17,4 +17,13 @@
                     turbo_confirm: "Are you sure?"
                     } %>
     </p>
+
+
+    <h2> like</h2>
+    <%= button_to 'Like', bblog_post_comment_likes_path(@bblog, @post, @comment), method: :post %>
+
+
+
   <%end%>
+
+  

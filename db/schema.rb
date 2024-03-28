@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_03_01_135540) do
+ActiveRecord::Schema[7.0].define(version: 2024_03_25_132123) do
   create_table "bblogs", force: :cascade do |t|
     t.text "custom_domain"
     t.string "title"
@@ -26,6 +26,19 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_01_135540) do
     t.datetime "updated_at", null: false
     t.integer "post_id", null: false
     t.index ["post_id"], name: "index_comments_on_post_id"
+  end
+
+  create_table "likes", force: :cascade do |t|
+    t.integer "comment_id", null: false
+    t.integer "user_id", null: false
+    t.integer "post_id", null: false
+    t.integer "bblog_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bblog_id"], name: "index_likes_on_bblog_id"
+    t.index ["comment_id"], name: "index_likes_on_comment_id"
+    t.index ["post_id"], name: "index_likes_on_post_id"
+    t.index ["user_id"], name: "index_likes_on_user_id"
   end
 
   create_table "posts", force: :cascade do |t|
@@ -53,5 +66,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_01_135540) do
   end
 
   add_foreign_key "comments", "posts"
+  add_foreign_key "likes", "bblogs"
+  add_foreign_key "likes", "comments"
+  add_foreign_key "likes", "posts"
+  add_foreign_key "likes", "users"
   add_foreign_key "posts", "bblogs"
 end

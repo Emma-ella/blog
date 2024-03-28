@@ -12,6 +12,10 @@ class PostsController < ApplicationController
   def show
     @post= Post.find(params[:id])   
     @comment = @post.comments.build 
+
+    @bblog = Bblog.find(params[:bblog_id])
+    @post= Post.find(params[:id])
+    @comment = Comment.find(params[:id])
   end
 
   # GET bblogs/:bblog_id/posts/new
