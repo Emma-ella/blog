@@ -15,7 +15,7 @@ class PostsController < ApplicationController
 
     @bblog = Bblog.find(params[:bblog_id])
     @post= Post.find(params[:id])
-    @comment = Comment.find(params[:id])
+    @comment = Comment.find(params[:comment_id])
   end
 
   # GET bblogs/:bblog_id/posts/new
