@@ -6,10 +6,10 @@ class LikesController < ApplicationController
         @comment = Comment.find(params[:comment_id])
 
 
-        @like = @comment.likes.new(user_id: current_user.id, comment_id: params[:comment_id], post_id: params[:post_id],, bblog_id: params[:bblog_id])
+        @like = @comment.likes.new(user_id: current_user.id, comment_id: params[:comment_id], post_id: params[:post_id], bblog_id: params[:bblog_id])
         @like.save!
         if @like.save
-            redirect_to bblog_post_comments_path(@comment), notice: "like added with success"
+            redirect_to bblog_post_url(@bblog, @post), notice: "like added with success"
         else 
             redirect_to bblog_post_comments_path(@comment), alert: "errors when adding like"
         end
@@ -20,9 +20,11 @@ class LikesController < ApplicationController
 
     def destroy
         @like = Like.find(params[:id])
-        comment = @like.comment
+        @comment = @like.comment
+        @bblog = @comment.post.bblog
+        @post = @comment.post
         @like.destroy
-        redirect_to bblog_post_comments_path
+        redirect_to bblog_post_url(@bblog, @post), notice: "like removed successfully"
     end
 
 
@@ -30,7 +32,5 @@ class LikesController < ApplicationController
         def comment_params
             params.require(:comment).permit(:commenter, :body)
         end
-        def find_comment
-            @comment = Comment.find(params[:comment_id])
-        end
+
 end

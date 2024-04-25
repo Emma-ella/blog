@@ -13,9 +13,8 @@ class PostsController < ApplicationController
     @post= Post.find(params[:id])   
     @comment = @post.comments.build 
 
-    @bblog = Bblog.find(params[:bblog_id])
-    @post= Post.find(params[:id])
-    @comment = Comment.find(params[:comment_id])
+      @bblog = Bblog.find(params[:bblog_id])
+      #@comment = Comment.find(params[:comment_id])
   end
 
   # GET bblogs/:bblog_id/posts/new
@@ -30,9 +29,13 @@ class PostsController < ApplicationController
   # POST /bblogs/:bblog_id/posts or /posts.json
   def create
     @post = @bblog.posts.build(post_params)
+
+    
     authorize @post
     respond_to do |format|
       if @post.save
+        @category = Category.find_or_create_by(category_name: params[:post][:category_name])
+        @post.category = @category
         format.html { redirect_to bblog_post_url(@bblog, @post), notice: "Post was successfully created." }
         format.json { render :show, status: :created, location: @post }
       else
@@ -81,6 +84,6 @@ class PostsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def post_params
-      params.require(:post).permit(:title, :content, :author_name, :published_at)
+      params.require(:post).permit(:title, :content, :author_name, :published_at, :category_name)
     end
 end

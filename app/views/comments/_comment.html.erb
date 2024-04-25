@@ -18,11 +18,13 @@
                     } %>
     </p>
 
-
-    <h2> like</h2>
-    <%= button_to 'Like', bblog_post_comment_likes_path(@bblog, @post, @comment), method: :post %>
-
-
+    <%= @comment.likes.count%> like
+    <% if comment.likes.exists?(user_id: current_user.id) %>
+      <%= button_to 'Unlike', bblog_post_comment_like_path(@bblog, @post, comment, comment.likes.first), method: :delete %>
+    <%else%>
+      <%= button_to 'Like', bblog_post_comment_likes_path(@bblog, @post, comment), method: :post %>
+    <%end%>
+    <br/>
 
   <%end%>
 

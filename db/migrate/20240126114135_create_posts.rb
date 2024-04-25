@@ -5,6 +5,11 @@ class CreatePosts < ActiveRecord::Migration[7.0]
       t.text :content
       t.string :author_name
       t.datetime :published_at
+      
+
+
+
+
 
       t.timestamps
     end
